@@ -23,7 +23,9 @@ public class StudentController {
     public List<StudentDto> getAllStudents(@RequestParam(required = false) String id,
                                            @RequestParam(required = false) String name,
                                            @RequestParam(required = false) String faculty,
-                                           @RequestParam(required = false) String career) {
-        return studentService.findAllByFilters(id, name, faculty, career);
+                                           @RequestParam(required = false) String career,
+                                           @RequestParam(required = false) String generation,
+                                           @RequestParam(required = false) String modality) {
+        return studentService.findAllByFilters(id, name, faculty, career, generation, modality);
     }
 }

@@ -44,4 +44,15 @@ public class StudentSpecification {
                 cB.equal(cB.lower(cB.trim(root.get("career").get("name"))),
                         providedCareer.trim().toLowerCase());
     }
+
+    public Specification<Student> hasGeneration(String providedGeneration) {
+        return (root, query, cB) ->
+                cB.equal(cB.lower(cB.trim(root.get("generation"))), providedGeneration.trim().toLowerCase());
+    }
+
+    public Specification<Student> hasModality(String providedModality) {
+        return (root, query, cB) ->
+                cB.equal(cB.lower(cB.trim(root.get("degree").get("modality").get("name"))),
+                        providedModality.trim().toLowerCase());
+    }
 }
