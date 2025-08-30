@@ -5,6 +5,7 @@ import com.backend.demo.service.StudentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/student")
@@ -27,5 +28,12 @@ public class StudentController {
                                            @RequestParam(required = false) String generation,
                                            @RequestParam(required = false) String modality) {
         return studentService.findAllByFilters(id, name, faculty, career, generation, modality);
+    }
+
+    @GetMapping("/pruebas")
+    public Map<String, Long> pruebas(@RequestParam(required = false) String faculty,
+                                     @RequestParam(required = false) String career,
+                                     @RequestParam(required = false) String generation){
+        return studentService.prueba(faculty, career, generation);
     }
 }

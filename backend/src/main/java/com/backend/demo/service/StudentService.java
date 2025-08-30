@@ -18,12 +18,14 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final StudentSpecification studentSpecification;
     private final StudentMapper studentMapper;
+    private final ChartService chartService;
 
     public StudentService(StudentRepository studentRepository, StudentSpecification studentSpecification,
-                          StudentMapper studentMapper) {
+                          StudentMapper studentMapper, ChartService chartService) {
         this.studentRepository = studentRepository;
         this.studentSpecification = studentSpecification;
         this.studentMapper = studentMapper;
+        this.chartService = chartService;
     }
 
     public List<StudentDto> findAllByFilters(String id, String name, String faculty, String career,
@@ -50,5 +52,9 @@ public class StudentService {
         }
 
         return studentRepository.findAll(student).stream().map(studentMapper::toStudentDto).toList();
+    }
+
+    public Map<String, Long> prueba(String faculty, String career, String generation) {
+        return chartService.getData(faculty, career, generation);
     }
 }
