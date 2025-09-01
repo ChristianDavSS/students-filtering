@@ -16,24 +16,30 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    @GetMapping("/generations")
+    public List<String> getGenerations() {
+        return studentService.getGenerations();
+    }
+
     /**
      * @param id, name, faculty, career: class to get the faculty, career, name or id_number from a student to filter
      * @return List<StudentDto>: Returns a list of the dto of the users matching the filters
      */
-    @GetMapping
-    public List<StudentDto> getAllStudents(@RequestParam(required = false) String id,
+    @GetMapping("/filter")
+    public List<StudentDto> getStudentsByFilters(@RequestParam(required = false) String id,
                                            @RequestParam(required = false) String name,
-                                           @RequestParam(required = false) String faculty,
-                                           @RequestParam(required = false) String career,
+                                           @RequestParam(required = false) Long facultyId,
+                                           @RequestParam(required = false) Long careerId,
                                            @RequestParam(required = false) String generation,
-                                           @RequestParam(required = false) String modality) {
-        return studentService.findAllByFilters(id, name, faculty, career, generation, modality);
+                                           @RequestParam(required = false) Long modalityId) {
+        return studentService.findAllByFilters(id, name, facultyId, careerId, generation, modalityId);
     }
 
-    @GetMapping("/pruebas")
-    public Map<String, Long> pruebas(@RequestParam(required = false) String faculty,
-                                     @RequestParam(required = false) String career,
-                                     @RequestParam(required = false) String generation){
-        return studentService.prueba(faculty, career, generation);
+    @GetMapping("/chart")
+    public Map<String, Long> getChartData(@RequestParam(required = false) Long facultyId,
+                                         @RequestParam(required = false) Long careerId,
+                                         @RequestParam(required = false) String generation,
+                                          @RequestParam(required = false) Long modalityId){
+        return studentService.getChartData(facultyId, careerId, generation, modalityId);
     }
 }

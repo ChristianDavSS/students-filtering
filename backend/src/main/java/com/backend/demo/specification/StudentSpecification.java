@@ -26,23 +26,21 @@ public class StudentSpecification {
     }
 
     /**
-     * @param providedFaculty: String to see if there´s user with that exact faculty
+     * @param facultyId: String to see if there´s user with that exact faculty
      * @return Specification<Student>: The filtered query of the user matching a faculty
      */
-    public Specification<Student> hasFaculty(String providedFaculty) {
+    public Specification<Student> hasFacultyId(Long facultyId) {
         return (root, query, cB) ->
-                cB.equal(cB.lower(cB.trim(root.get("faculty").get("name"))),
-                        providedFaculty.trim().toLowerCase());
+                cB.equal(root.get("faculty").get("id"), facultyId);
     }
 
     /**
-     * @param providedCareer: String to see if there´s students related into that exact career
+     * @param careerId: String to see if there´s students related into that exact career
      * @return Specification<Student>: The filtered query of the user matching a career
      */
-    public Specification<Student> hasCareer(String providedCareer) {
+    public Specification<Student> hasCareerId(Long careerId) {
         return (root, query, cB) ->
-                cB.equal(cB.lower(cB.trim(root.get("career").get("name"))),
-                        providedCareer.trim().toLowerCase());
+                cB.equal(root.get("career").get("id"), careerId);
     }
 
     public Specification<Student> hasGeneration(String providedGeneration) {
@@ -50,9 +48,8 @@ public class StudentSpecification {
                 cB.equal(cB.lower(cB.trim(root.get("generation"))), providedGeneration.trim().toLowerCase());
     }
 
-    public Specification<Student> hasModality(String providedModality) {
+    public Specification<Student> hasModalityId(Long modalityId) {
         return (root, query, cB) ->
-                cB.equal(cB.lower(cB.trim(root.get("degree").get("modality").get("name"))),
-                        providedModality.trim().toLowerCase());
+                cB.equal(root.get("degree").get("modality").get("id"), modalityId);
     }
 }

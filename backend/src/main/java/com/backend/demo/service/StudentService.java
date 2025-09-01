@@ -28,8 +28,8 @@ public class StudentService {
         this.chartService = chartService;
     }
 
-    public List<StudentDto> findAllByFilters(String id, String name, String faculty, String career,
-                                             String generation, String modality) {
+    public List<StudentDto> findAllByFilters(String id, String name, Long facultyId, Long careerId,
+                                             String generation, Long modalityId) {
         Specification<Student> student = Specification.allOf();
 
         if (!StringUtil.isNullOrEmpty(id)) {
@@ -38,23 +38,27 @@ public class StudentService {
         if (!StringUtil.isNullOrEmpty(name)) {
             student = student.and(studentSpecification.containsName(name));
         }
-        if (!StringUtil.isNullOrEmpty(faculty)) {
-            student = student.and(studentSpecification.hasFaculty(faculty));
+        if (facultyId != null) {
+            student = student.and(studentSpecification.hasFacultyId(facultyId));
         }
-        if (!StringUtil.isNullOrEmpty(career)) {
-            student = student.and(studentSpecification.hasCareer(career));
+        if (careerId != null) {
+            student = student.and(studentSpecification.hasCareerId(careerId));
         }
         if (!StringUtil.isNullOrEmpty(generation)) {
             student = student.and(studentSpecification.hasGeneration(generation));
         }
-        if (!StringUtil.isNullOrEmpty(modality)) {
-            student = student.and(studentSpecification.hasModality(modality));
+        if (modalityId != null) {
+            student = student.and(studentSpecification.hasModalityId(modalityId));
         }
 
         return studentRepository.findAll(student).stream().map(studentMapper::toStudentDto).toList();
     }
 
-    public Map<String, Long> prueba(String faculty, String career, String generation) {
-        return chartService.getData(faculty, career, generation);
+    public List<String> getGenerations() {
+        return studentRepository.findAll().stream().map(Student::getGeneration).distinct().toList();
+    }
+
+    public Map<String, Long> getChartData(Long facultyId, Long careerId, String generation, Long modalityId) {
+        return chartService.getData(facultyId, careerId, generation, modalityId);
     }
 }

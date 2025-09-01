@@ -7,6 +7,7 @@ import com.backend.demo.repository.ModalityRepository;
 import com.backend.demo.repository.StudentRepository;
 import com.backend.demo.repository.entity.Career;
 import com.backend.demo.repository.entity.Faculty;
+import com.backend.demo.repository.entity.Modality;
 import jakarta.persistence.Tuple;
 import org.springframework.stereotype.Service;
 
@@ -29,22 +30,26 @@ public class ChartService {
         this.modalityRepository = modalityRepository;
     }
 
-    public Map<String, Long> getData(String faculty, String career, String generation) {
+    public Map<String, Long> getData(Long facultyId, Long careerId, String generation, Long modalityId) {
         Map<String, Long> map = new HashMap<>();
         List<Tuple> values = facultyRepository.countStudentsByFaculty();
         Faculty fac = null;
         Career car = null;
 
-        if (!StringUtil.isNullOrEmpty(faculty)) {
-            fac = facultyRepository.findByName(faculty).orElse(null);
+        if (facultyId != null) {
+            fac = facultyRepository.findById(facultyId).orElse(null);
             values = careerRepository.countStudentsByCareer(fac);
         }
-        if (!StringUtil.isNullOrEmpty(career)) {
-            car = careerRepository.getCareerByName(career).orElse(null);
+        if (careerId != null) {
+            car = careerRepository.findById(careerId).orElse(null);
             values = studentRepository.countStudentsByGeneration(fac, car);
         }
         if (!StringUtil.isNullOrEmpty(generation)) {
             values = modalityRepository.countStudentsByModality(fac, car, generation);
+        }
+        if (modalityId != null) {
+            Modality mod = modalityRepository.findById(modalityId).orElse(null);
+            values = modalityRepository.countStudentsByAll(fac, car, generation, mod);
         }
 
         for (Tuple value : values) {

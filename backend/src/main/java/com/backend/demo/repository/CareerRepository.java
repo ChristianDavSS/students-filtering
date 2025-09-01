@@ -13,7 +13,6 @@ import java.util.Optional;
 
 public interface CareerRepository extends JpaRepository<Career, Long>, JpaSpecificationExecutor<Career> {
     List<Career> getCareersByFaculty(Faculty faculty);
-    Optional<Career> getCareerByName(String career);
 
     @Query("SELECT c.name AS name, COUNT(st.id) AS quantity FROM Student st JOIN st.career c" +
             " WHERE (:faculty IS NULL OR c.faculty = :faculty) GROUP BY c.name")
