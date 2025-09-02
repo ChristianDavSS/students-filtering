@@ -1,6 +1,7 @@
 package com.backend.demo.controller;
 
 import com.backend.demo.component.dto.StudentDto;
+import com.backend.demo.component.request.StudentRegisterRequest;
 import com.backend.demo.service.StudentService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,11 @@ public class StudentController {
     @GetMapping("/generations")
     public List<String> getGenerations() {
         return studentService.getGenerations();
+    }
+
+    @PostMapping
+    public void registerStudent(@RequestBody StudentRegisterRequest request) {
+        studentService.registerStudent(request);
     }
 
     /**

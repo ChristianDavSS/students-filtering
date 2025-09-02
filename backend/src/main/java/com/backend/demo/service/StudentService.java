@@ -3,6 +3,8 @@ package com.backend.demo.service;
 import ch.qos.logback.core.util.StringUtil;
 import com.backend.demo.component.dto.StudentDto;
 import com.backend.demo.component.mapper.StudentMapper;
+import com.backend.demo.component.mapper.StudentRegisterMapper;
+import com.backend.demo.component.request.StudentRegisterRequest;
 import com.backend.demo.repository.StudentRepository;
 import com.backend.demo.repository.entity.Student;
 import com.backend.demo.specification.StudentSpecification;
@@ -19,13 +21,15 @@ public class StudentService {
     private final StudentSpecification studentSpecification;
     private final StudentMapper studentMapper;
     private final ChartService chartService;
+    private final StudentRegisterMapper studentRegisterMapper;
 
     public StudentService(StudentRepository studentRepository, StudentSpecification studentSpecification,
-                          StudentMapper studentMapper, ChartService chartService) {
+                          StudentMapper studentMapper, ChartService chartService, StudentRegisterMapper studentRegisterMapper) {
         this.studentRepository = studentRepository;
         this.studentSpecification = studentSpecification;
         this.studentMapper = studentMapper;
         this.chartService = chartService;
+        this.studentRegisterMapper = studentRegisterMapper;
     }
 
     public List<StudentDto> findAllByFilters(String id, String name, Long facultyId, Long careerId,
@@ -60,5 +64,9 @@ public class StudentService {
 
     public Map<String, Long> getChartData(Long facultyId, Long careerId, String generation, Long modalityId) {
         return chartService.getData(facultyId, careerId, generation, modalityId);
+    }
+
+    public void registerStudent(StudentRegisterRequest request) {
+        studentRegisterMapper.registerStudent(request);
     }
 }
