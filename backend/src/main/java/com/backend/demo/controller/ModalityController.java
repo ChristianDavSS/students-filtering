@@ -1,7 +1,6 @@
 package com.backend.demo.controller;
 
-import com.backend.demo.component.dto.ModalityDto;
-import com.backend.demo.component.mapper.ModalityMapper;
+import com.backend.demo.component.dto.NameDto;
 import com.backend.demo.service.ModalityService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,14 +12,12 @@ import java.util.List;
 @RequestMapping("/modality")
 public class ModalityController {
     private final ModalityService modalityService;
-    private final ModalityMapper modalityMapper;
-    public ModalityController(ModalityService modalityService, ModalityMapper modalityMapper) {
+    public ModalityController(ModalityService modalityService) {
         this.modalityService = modalityService;
-        this.modalityMapper = modalityMapper;
     }
 
     @GetMapping
-    public List<ModalityDto> getAllModalities() {
+    public List<NameDto> getAllModalities() {
         return modalityService.getAllModalities();
     }
 }

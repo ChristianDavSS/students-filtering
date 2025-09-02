@@ -1,7 +1,7 @@
 package com.backend.demo.service;
 
-import com.backend.demo.component.dto.TeacherDto;
-import com.backend.demo.component.mapper.TeacherMapper;
+import com.backend.demo.component.dto.NameDto;
+import com.backend.demo.component.mapper.NameMapper;
 import com.backend.demo.repository.TeacherRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,13 +10,13 @@ import java.util.List;
 @Service
 public class TeacherService {
     private final TeacherRepository teacherRepository;
-    private final TeacherMapper teacherMapper;
-    public TeacherService(TeacherRepository teacherRepository, TeacherMapper teacherMapper) {
+    private final NameMapper nameMapper;
+    public TeacherService(TeacherRepository teacherRepository, NameMapper nameMapper) {
         this.teacherRepository = teacherRepository;
-        this.teacherMapper = teacherMapper;
+        this.nameMapper = nameMapper;
     }
 
-    public List<TeacherDto> getAllTeachers() {
-        return teacherRepository.findAll().stream().map(teacherMapper::toDto).toList();
+    public List<NameDto> getAllTeachers() {
+        return teacherRepository.findAll().stream().map(nameMapper::toDto).toList();
     }
 }

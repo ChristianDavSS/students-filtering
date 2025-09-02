@@ -1,7 +1,7 @@
 package com.backend.demo.service;
 
-import com.backend.demo.component.dto.CareerDto;
-import com.backend.demo.component.mapper.CareerMapper;
+import com.backend.demo.component.dto.NameDto;
+import com.backend.demo.component.mapper.NameMapper;
 import com.backend.demo.repository.CareerRepository;
 import com.backend.demo.repository.FacultyRepository;
 import com.backend.demo.repository.entity.Career;
@@ -14,15 +14,15 @@ public class CareerService {
     // Dependency injection
     private final CareerRepository careerRepository;
     private final FacultyRepository facultyRepository;
-    private final CareerMapper careerMapper;
+    private final NameMapper nameMapper;
     public CareerService(CareerRepository careerRepository, FacultyRepository facultyRepository,
-                         CareerMapper careerMapper) {
+                         NameMapper nameMapper) {
         this.careerRepository = careerRepository;
         this.facultyRepository = facultyRepository;
-        this.careerMapper = careerMapper;
+        this.nameMapper = nameMapper;
     }
 
-    public List<CareerDto> getAllCareers(Long facultyId) {
+    public List<NameDto> getAllCareers(Long facultyId) {
         List<Career> careers = careerRepository.findAll();
         if (facultyId != null) {
             careers = careerRepository.getCareersByFaculty(
@@ -30,6 +30,6 @@ public class CareerService {
             );
         }
 
-        return careers.stream().map(careerMapper::toDto).toList();
+        return careers.stream().map(nameMapper::toDto).toList();
     }
 }

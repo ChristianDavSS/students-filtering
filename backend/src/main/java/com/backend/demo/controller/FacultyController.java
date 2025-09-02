@@ -1,6 +1,6 @@
 package com.backend.demo.controller;
 
-import com.backend.demo.component.dto.FacultyDto;
+import com.backend.demo.component.dto.NameDto;
 import com.backend.demo.service.FacultyService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +18,7 @@ public class FacultyController {
     }
 
     @GetMapping
-    public List<FacultyDto> getAllFaculty() {
+    public List<NameDto> getAllFaculty() {
         return facultyService.findAll();
     }
 }

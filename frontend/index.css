@@ -1,0 +1,28 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+table {
+    text-align: center;
+}
+
+#tablediv {
+    overflow: auto;
+    max-height: 400px;
+}
+
+#graphic {
+    width: max-content;
+    height: 500px;
+    width: 800px;
+    padding: 0;
+    margin: auto;
+    display: block;
+}
+
+#inputs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}

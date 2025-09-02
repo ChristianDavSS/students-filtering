@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body onload="load()">
+    <div id="inputs">
+        <div>
+            <h3>Facultad</h3>
+            <select name="faculty" id="faculty" aria-placeholder="pene"></select>
+        </div>
+        <div>
+            <h3>Carrera</h3>
+            <select name="career" id="career"></select>
+        </div>
+        <div>
+            <h3>Generación</h3>
+            <select name="generation" id="generation"></select>
+        </div>
+        <div>
+            <h3>Modalidad</h3>
+            <select name="modality" id="modality"></select>
+        </div>
+    </div>
+
+    <div id="tablediv">
+        <table border="1" id="table">
+            <thead>
+                <th>Número de cuenta</th>
+                <th>Nombre</th>
+                <th>Generacion</th>
+                <th>Facultad</th>
+                <th>Carrera</th>
+                <th>Modalidad de titulación</th>
+                <th>Sinodal (presidente)</th>
+                <th>Sinodal (secretario)</th>
+                <th>Sinodal (vocal)</th>
+                <th>Proyecto</th>
+                <th>Asesor</th>
+                <th>CoAsesor</th>
+            </thead>
+            <tbody id="bodyt">
+                <!-- Llenado dinamico -->
+            </tbody>
+        </table>
+    </div>
+    <h3 id="no-table-msg"></h3>
+
+    <canvas id="graphic" height="500" width="800"></canvas>
+</body>
+<script src="index.js"></script>
+</html>

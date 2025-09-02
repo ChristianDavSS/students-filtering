@@ -1,6 +1,6 @@
 package com.backend.demo.controller;
 
-import com.backend.demo.component.dto.CareerDto;
+import com.backend.demo.component.dto.NameDto;
 import com.backend.demo.service.CareerService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ public class CareerController {
     }
 
     @GetMapping
-    public List<CareerDto> getAllCareers(@RequestParam(required = false) Long facultyId) {
+    public List<NameDto> getAllCareers(@RequestParam(required = false) Long facultyId) {
         return careerService.getAllCareers(facultyId);
     }
 
