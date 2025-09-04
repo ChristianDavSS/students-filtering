@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface ProjectRepository extends JpaRepository<Project, Long>, JpaSpecificationExecutor<Project> {
-    @Query("SELECT p FROM Project p WHERE LOWER(TRIM(p.name)) = LOWER(TRIM(:name))")
+    @Query("SELECT p FROM Project p WHERE LOWER(TRIM(REPLACE(p.name, ' ', ''))) = LOWER(TRIM(REPLACE(:name, ' ', '')))")
     Optional<Project> findByName(@Param("name") String name);
 }

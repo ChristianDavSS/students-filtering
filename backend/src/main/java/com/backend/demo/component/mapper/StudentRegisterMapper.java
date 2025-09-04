@@ -75,32 +75,29 @@ public class StudentRegisterMapper {
             );
 
         /* Saving up the teachers */
-        if (project != null && project.getId() != null) {
-            List<DegreeTeacher> degreeTeachers = new ArrayList<>();
-            for (String role : request.getTeachers().keySet()) {
-                if (request.getTeachers().get(role) == null) continue;
-                degreeTeachers.add(
-                        DegreeTeacher
-                                .builder()
-                                .degreeTeacherId(
-                                        DegreeTeacherPK
-                                                .builder()
-                                                .degree_id(degree.getId())
-                                                .role_id(roleRepository.findByName(role).getId())
-                                                .teacher_id(Objects.requireNonNull(teacherRepository.findById(
-                                                        request.getTeachers().get(role)).orElse(null)).getId()
-                                                )
-                                                .build()
-                                )
-                                .degree(degree)
-                                .teacher(teacherRepository.findById(request.getTeachers().get(role)).orElse(null))
-                                .roles(roleRepository.findByName(role))
-                                .build()
-                );
-            }
-            degreeTeacherRepository.saveAll(degreeTeachers);
+        List<DegreeTeacher> degreeTeachers = new ArrayList<>();
+        for (String role : request.getTeachers().keySet()) {
+            if (request.getTeachers().get(role) == null) continue;
+            degreeTeachers.add(
+                DegreeTeacher
+                    .builder()
+                    .degreeTeacherId(
+                        DegreeTeacherPK
+                            .builder()
+                            .degree_id(degree.getId())
+                            .role_id(roleRepository.findByName(role).getId())
+                            .teacher_id(Objects.requireNonNull(teacherRepository.findById(
+                                request.getTeachers().get(role)).orElse(null)).getId()
+                            )
+                            .build()
+                    )
+                    .degree(degree)
+                    .teacher(teacherRepository.findById(request.getTeachers().get(role)).orElse(null))
+                    .roles(roleRepository.findByName(role))
+                    .build()
+            );
         }
-
+        degreeTeacherRepository.saveAll(degreeTeachers);
 
         studentRepository.save(
                 Student
