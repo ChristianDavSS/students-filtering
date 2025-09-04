@@ -29,23 +29,30 @@ const registerBtn = document.getElementById('registerBtn');
 const registerModal = document.getElementById('registerModal');
 const closeBtn = document.querySelector('.close-btn');
 const registerForm = document.getElementById('registerForm');
-const regFacultad = document.getElementById('regFacultad');
-const regCarrera = document.getElementById('regCarrera');
+const regFacultad = document.getElementById('regFaculty');
+const regCarrera = document.getElementById('regCareer');
 const regNcta = document.getElementById('regNcta');
 const regNombre = document.getElementById('regNombre');
-const regGeneracion = document.getElementById('regGeneracion');
+const regGeneracion = document.getElementById('regGeneration');
 const regFechaTitulacion = document.getElementById('regFechaTitulacion');
-const regModalidad = document.getElementById('regModalidad');
+const regModalidad = document.getElementById('regModality');
 const regProyecto = document.getElementById('regProyecto');
 const regAsesor = document.getElementById('regAsesor');
 const regCoasesor = document.getElementById('regCoasesor');
-const regSinodal1 = document.getElementById('regSinodal1');
-const regSinodal2 = document.getElementById('regSinodal2');
-const regSinodal3 = document.getElementById('regSinodal3');
+const regSinodal1 = document.getElementById('regSinodalPresidente');
+const regSinodal2 = document.getElementById('regSinodalSecretario');
+const regSinodal3 = document.getElementById('regSinodalVocal');
+const modalidadesConAsesor = [
+    "Tesis", 
+    "Tesina", 
+    "Articulo de investigación", 
+    "Sistematización de experiencia profesional"
+];
 
 // Campos de asesor/coasesor para mostrar/ocultar
 const asesorField = document.getElementById('asesorField');
 const coasesorField = document.getElementById('coasesorField');
+const proyectoField = document.getElementById('proyectoField');
 
 // Variables globales
 let currentChart = null;
@@ -127,12 +134,14 @@ async function performSearch(extraParams = {}) {
     })
     
     displayResults(filteredData);
+    if (Object.keys(extraParams)[0] === 'isTrusted') clearSearch();
 }
 
 // Función para obtener datos del backend y settearlos en selectbox.
 const getSelectData = async (url, params = {}, select) => {
     select.innerHTML = '';
     createDefaultOpcs(select);
+
     const { data } = await axios.get(`http://localhost:8080/${url}`, {
         params: params
     });
@@ -162,15 +171,15 @@ async function performChartSearch() {
     showLoading();
     
     const params = {
-        facultyId: facultyValue,
-        careerId: careerValue,
-        generation: generationValue,
-        modalityId: modalityValue
+        facultyId: facultyValue || null,
+        careerId: careerValue || null,
+        generation: generationValue || null,
+        modalityId: modalityValue || null
     }
     const { data: chartData } = await axios.get("http://localhost:8080/student/chart", {
         params: params
     })
-    
+
     if (Object.values(chartData).filter(v => v === 0).length === chartData.length) {
         loadingChart.style.display = 'none';
         noChartData.innerHTML = `
@@ -411,7 +420,6 @@ function clearSearch() {
 // --- Lógica del formulario de registro ---
 registerBtn.addEventListener('click', () => {
     registerModal.style.display = 'block';
-    updateCarrerasDropdown(regFacultad, regCarrera);
     // Asegurarse de que los campos de asesor/coasesor estén visibles al abrir el modal
     asesorField.classList.remove('hidden');
     coasesorField.classList.remove('hidden');
@@ -431,56 +439,65 @@ window.addEventListener('click', (event) => {
 
 // Lógica para mostrar/ocultar campos de asesor
 regModalidad.addEventListener('change', () => {
-    const selectedModalidad = regModalidad.value;
-    const modalidadesConAsesor = [
-        "Tesis", 
-        "Tesina", 
-        "Artículo de Investigación", 
-        "Sistematización de experiencia profesional"
-    ];
+    const selectedModalidad = regModalidad.options[regModalidad.selectedIndex].text;
 
     if (modalidadesConAsesor.includes(selectedModalidad)) {
         asesorField.classList.remove('hidden');
         coasesorField.classList.remove('hidden');
+        coasesorField.classList.remove('hidden');
+        proyectoField.classList.remove('hidden');
         regAsesor.setAttribute('required', 'true');
         regCoasesor.setAttribute('required', 'true');
+        regProyecto.setAttribute('required', 'true');
     } else {
         asesorField.classList.add('hidden');
         coasesorField.classList.add('hidden');
+        proyectoField.classList.add('hidden');
         regAsesor.removeAttribute('required');
         regCoasesor.removeAttribute('required');
-        regAsesor.value = "N/A";
-        regCoasesor.value = "N/A";
+        regProyecto.removeAttribute('required')
+        regAsesor.value = "";
+        regCoasesor.value = "";
+        regProyecto.value = "";
     }
-    // Si no es un proyecto, el nombre del proyecto es N/A
-    regProyecto.value = modalidadesConAsesor.includes(selectedModalidad) ? "" : "N/A";
 });
 
 registerForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    const nuevoTitulado = {
-        ncta: regNcta.value,
-        nombre: regNombre.value,
-        facultad: regFacultad.value,
-        carrera: regCarrera.value,
-        generacion: regGeneracion.value,
-        fechaTitulacion: regFechaTitulacion.value,
-        modalidad: regModalidad.value,
-        proyecto: regProyecto.value || "N/A",
-        asesor: regAsesor.value || "N/A",
-        coasesor: regCoasesor.value || "N/A",
-        sinodal1: regSinodal1.value,
-        sinodal2: regSinodal2.value,
-        sinodal3: regSinodal3.value,
-    };
+    const registerStudent = async () => {
+        const params = {
+            id_number: regNcta.value,
+            name: regNombre.value,
+            facultyId: regFacultad.value,
+            careerId: regCarrera.value,
+            generation: regGeneracion.value,
+            date: regFechaTitulacion.value,
+            modalityId: regModalidad.value,
+            project: regProyecto.value || null,
+            teachers: {
+                asesor: regAsesor.value || null,
+                coasesor: regCoasesor.value || null,
+                sinodalpresidente: regSinodal1.value,
+                sinodalsecretario: regSinodal2.value,
+                sinodalvocal: regSinodal3.value,
+            }
+        };
 
-    // Actualizar la tabla
-    displayResults(mockData);
+        try{
+            await axios.post("http://localhost:8080/student", params)
+        } catch (e) {
+            if (e.response.status === 409) alert("Este usuario ya está registrado.")
+        }
+    }
+
+    registerStudent();
 
     alert('¡Titulado registrado con éxito!');
     registerModal.style.display = 'none';
     registerForm.reset();
+    // Actualizar la tabla
+    performSearch();
 });
 
 // Event listener para las carreras dependientes de una facultad
@@ -490,16 +507,39 @@ facultySelectChart.addEventListener("change", () => {
 
 // Event listener para el filtro dinámico de facultades/carreras en el modal de registro
 regFacultad.addEventListener('change', () => {
-    updateCarrerasDropdown(regFacultad, regCarrera);
+    getSelectData("career", {facultyId: regFacultad.value}, regCarrera);
+    regCarrera.disabled = regFacultad.value === "";
 });
 
 // Event Listeners - SIN DUPLICACIÓN
 document.addEventListener('DOMContentLoaded', () => {
-    // Function to get the initial data from the database.
-    const getMockData = async () => {
-        const { data: mockData } = await axios.get("http://localhost:8080/student/filter");
-        return mockData
+    // Función para obtener los datos iniciales de la tabla.
+    const getTeachers = async () => {
+        const selectsTeachers = [regAsesor, regCoasesor, regSinodal1, regSinodal2, regSinodal3];
+        selectsTeachers.forEach(e => {
+            getSelectData("teachers", {}, e);
+        });
     }
+    getTeachers();
+
+    // Función para obtener las modalidades y agruparlas (REGISTRO DE ESTUDIANTE)
+    const getModality = async () => {
+        const { data } = await axios.get("http://localhost:8080/modality");
+        data.forEach(e => {
+            const opc = document.createElement("option");
+            opc.value = e.id
+            opc.innerHTML = e.name
+
+            if (modalidadesConAsesor.includes(e.name)) {
+                document.getElementById("conAsesores").appendChild(opc)
+            } else {
+                document.getElementById("sinAsesores").appendChild(opc)
+            }
+        })
+    }
+    // Agrupar las opciones de modalidad en sus grupos
+    getModality();
+
     searchBtn.addEventListener('click', performSearch);
     searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
@@ -531,8 +571,10 @@ document.addEventListener('DOMContentLoaded', () => {
         getSelectData(url, {}, e)
     });
 
-    // Mostrar todos los datos de la tabla al cargar la página
-    getMockData().then(initialData => {
-        displayResults(initialData);
-    })
+    const aux = [regFacultad, regCarrera];
+    aux.forEach(e => {
+        getSelectData(e.id.split("g")[1].toLowerCase(), {}, e)
+    });
+
+    performSearch();
 });

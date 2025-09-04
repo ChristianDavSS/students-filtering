@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulta de Titulación</title>
     <link rel="stylesheet" href="index.css">
+    <!-- Librería para gráficar datos -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Librería para hacer consultas al backend -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Librería para convertir la tabla en un archivo .xlsx -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
     <header>
@@ -153,39 +157,39 @@
                     <input type="text" id="regNombre" required>
                 </div>
                 <div class="form-group">
-                    <label for="regFacultad">Facultad</label>
-                    <select id="regFacultad" required>
+                    <label for="regFaculty">Facultad</label>
+                    <select id="regFaculty" required>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="regCarrera">Carrera</label>
-                    <select id="regCarrera" required disabled>
+                    <label for="regCareer">Carrera</label>
+                    <select id="regCareer" required disabled>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="regGeneracion">Generación</label>
-                    <input type="text" id="regGeneracion" placeholder="Ej. 2020-2025" required>
+                    <label for="regGeneration">Generación</label>
+                    <input type="text" id="regGeneration" placeholder="Ej. 2020-2025" minlength="9" maxlength="9" required>
                 </div>
                 <div class="form-group">
-                    <label for="regModalidad">Modalidad de Titulación</label>
-                    <select id="regModalidad" required>
+                    <label for="regModality">Modalidad de Titulación</label>
+                    <select id="regModality" required>
                         <option value="">Selecciona una modalidad</option>
-                        <optgroup label="Con asesor y co-asesor" id="with"></optgroup>
-                        <optgroup label="Sin asesor y co-asesor" id="without"></optgroup>
+                        <optgroup label="Con asesor y co-asesor" id="conAsesores"></optgroup>
+                        <optgroup label="Sin asesor y co-asesor" id="sinAsesores"></optgroup>
                     </select>
                 </div>
                 <div id="projectFields" class="form-group">
-                    <div class="form-group">
+                    <div class="form-group" id="proyectoField">
                         <label for="regProyecto">Nombre del Proyecto</label>
                         <input type="text" id="regProyecto">
                     </div>
                     <div class="form-group" id="asesorField">
                         <label for="regAsesor">Asesor</label>
-                        <input type="text" id="regAsesor">
+                        <select name="regAsesor" id="regAsesor"></select>
                     </div>
                     <div class="form-group" id="coasesorField">
                         <label for="regCoasesor">Co-asesor</label>
-                        <input type="text" id="regCoasesor">
+                        <select name="regCoasesor" id="regCoasesor"></select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -194,15 +198,15 @@
                 </div>
                 <div class="form-group">
                     <label for="regSinodal1">Sinodal 1 (Presidente)</label>
-                    <input type="text" id="regSinodal1" required>
+                    <select name="regSinodal1" id="regSinodalPresidente"></select>
                 </div>
                 <div class="form-group">
                     <label for="regSinodal2">Sinodal 2 (Secretario)</label>
-                    <input type="text" id="regSinodal2" required>
+                    <select name="regSinodal2" id="regSinodalSecretario"></select>
                 </div>
                 <div class="form-group">
                     <label for="regSinodal3">Sinodal 3 (Vocal)</label>
-                    <input type="text" id="regSinodal3" required>
+                    <select name="regSinodal3" id="regSinodalVocal"></select>
                 </div>
                 <button type="submit" class="submit-btn">Registrar</button>
             </form>
