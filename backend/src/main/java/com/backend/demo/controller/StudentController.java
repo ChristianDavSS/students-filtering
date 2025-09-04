@@ -17,7 +17,7 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("/generations")
+    @GetMapping("/generation")
     public List<String> getGenerations() {
         return studentService.getGenerations();
     }

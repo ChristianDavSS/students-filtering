@@ -1,57 +1,220 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Consulta de Titulación</title>
     <link rel="stylesheet" href="index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
-<body onload="load()">
-    <div id="inputs">
-        <div>
-            <h3>Facultad</h3>
-            <select name="faculty" id="faculty" aria-placeholder="pene"></select>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1 class="header-title">Consulta de Titulación UCOL</h1>
+                <button class="register-btn" id="registerBtn">
+                    Registrar Nuevo Titulado
+                </button>
+            </div>
         </div>
-        <div>
-            <h3>Carrera</h3>
-            <select name="career" id="career"></select>
-        </div>
-        <div>
-            <h3>Generación</h3>
-            <select name="generation" id="generation"></select>
-        </div>
-        <div>
-            <h3>Modalidad</h3>
-            <select name="modality" id="modality"></select>
+    </header>
+
+    <main class="container">
+
+        <section class="search-section">
+            <h2 class="search-title">Búsqueda Individual de Titulados</h2>
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput"
+                    placeholder="Ingresa tu búsqueda..."
+                >
+                <select class="filter-select" id="filterSelect">
+                    <option value="ncta">Número de Cuenta</option>
+                    <option value="nombre">Nombre del Estudiante</option>
+                </select>
+                <button class="search-btn" id="searchBtn">
+                    Buscar
+                </button>
+            </div>
+        </section>
+
+        <section class="search-section">
+            <h2 class="search-title">Búsqueda Gráfica de Titulados</h2>
+            <div class="search-container">
+                <select class="filter-select" id="facultySelectChart">
+                </select>
+                <select class="filter-select" id="careerSelectChart">
+                </select>
+                <select class="filter-select" id="generationSelectChart">
+                </select>
+                <select class="filter-select" id="modalitySelectChart">
+                </select>
+                <button class="search-btn" id="searchBtnChart">
+                    Generar Gráfico
+                </button>
+                <button class="clear-btn" id="clearBtnChart">
+                    Limpiar
+                </button>
+            </div>
+        </section>
+
+        <section class="results-section">
+            <h3 class="results-title">Resultados de la búsqueda</h3>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Buscando datos...</p>
+            </div>
+
+            <div class="table-container">
+                <table id="resultsTable">
+                    <thead>
+                        <tr>
+                            <th>NUM. CUENTA</th>
+                            <th>NOMBRE ESTUDIANTE</th>
+                            <th>FACULTAD</th>
+                            <th>CARRERA</th>
+                            <th>GENERACIÓN</th>
+                            <th>MODALIDAD TITULACIÓN</th>
+                            <th>FECHA TITULACIÓN</th>
+                            <th>SINODAL 1 (PRESIDENTE)</th>
+                            <th>SINODAL 2 (SECRETARIO)</th>
+                            <th>SINODAL 3 (VOCAL)</th>
+                            <th>NOMBRE PROYECTO</th>
+                            <th>ASESOR</th>
+                            <th>CO-ASESOR</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="no-results" id="noResults" style="display: none;">
+                <p>No se encontraron resultados para tu búsqueda.</p>
+                <p>Intenta con otros términos o verifica que los datos sean correctos.</p>
+            </div>
+        </section>
+
+        <section class="charts-section" id="chartsSection">
+            <h3 class="charts-title">Estadísticas de Titulación</h3>
+            
+            <div class="loading" id="loadingChart">
+                <div class="spinner"></div>
+                <p>Generando gráfico...</p>
+            </div>
+
+            <div class="chart-stats" id="chartStats" style="display: none;">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalTitulados">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="categoriasMostradas">0</div>
+                    <div class="stat-label">Categorías</div>
+                </div>
+            </div>
+
+            <div class="chart-type-selector" id="chartTypeSelector" style="display: none;">
+                <button class="chart-type-btn active" data-type="bar">Barras</button>
+                <button class="chart-type-btn" data-type="doughnut">Dona</button>
+                <button class="chart-type-btn" data-type="line">Línea</button>
+            </div>
+
+            <div class="chart-wrapper" id="chartWrapper" style="display: none;">
+                <h4 class="chart-title" id="chartTitle">Distribución</h4>
+                <div class="chart-container">
+                    <canvas id="chartCanvas"></canvas>
+                </div>
+            </div>
+
+            <div class="no-chart-data" id="noChartData">
+                <div style="font-size: 3em; opacity: 0.5; margin-bottom: 15px;">📊</div>
+                <p><strong>¡Genera tu primer gráfico!</strong></p>
+                <p>Selecciona una categoría y una opción para ver las estadísticas</p>
+            </div>
+        </section>
+    </main>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Registro de Nuevo Titulado</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="regNcta">Número de Cuenta</label>
+                    <input type="text" id="regNcta" minlength="8" maxlength="8" required>
+                </div>
+                <div class="form-group">
+                    <label for="regNombre">Nombre del Estudiante</label>
+                    <input type="text" id="regNombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="regFacultad">Facultad</label>
+                    <select id="regFacultad" required>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="regCarrera">Carrera</label>
+                    <select id="regCarrera" required disabled>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="regGeneracion">Generación</label>
+                    <input type="text" id="regGeneracion" placeholder="Ej. 2020-2025" required>
+                </div>
+                <div class="form-group">
+                    <label for="regModalidad">Modalidad de Titulación</label>
+                    <select id="regModalidad" required>
+                        <option value="">Selecciona una modalidad</option>
+                        <optgroup label="Con asesor y co-asesor" id="with"></optgroup>
+                        <optgroup label="Sin asesor y co-asesor" id="without"></optgroup>
+                    </select>
+                </div>
+                <div id="projectFields" class="form-group">
+                    <div class="form-group">
+                        <label for="regProyecto">Nombre del Proyecto</label>
+                        <input type="text" id="regProyecto">
+                    </div>
+                    <div class="form-group" id="asesorField">
+                        <label for="regAsesor">Asesor</label>
+                        <input type="text" id="regAsesor">
+                    </div>
+                    <div class="form-group" id="coasesorField">
+                        <label for="regCoasesor">Co-asesor</label>
+                        <input type="text" id="regCoasesor">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="regFechaTitulacion">Fecha de Titulación</label>
+                    <input type="date" id="regFechaTitulacion" required>
+                </div>
+                <div class="form-group">
+                    <label for="regSinodal1">Sinodal 1 (Presidente)</label>
+                    <input type="text" id="regSinodal1" required>
+                </div>
+                <div class="form-group">
+                    <label for="regSinodal2">Sinodal 2 (Secretario)</label>
+                    <input type="text" id="regSinodal2" required>
+                </div>
+                <div class="form-group">
+                    <label for="regSinodal3">Sinodal 3 (Vocal)</label>
+                    <input type="text" id="regSinodal3" required>
+                </div>
+                <button type="submit" class="submit-btn">Registrar</button>
+            </form>
         </div>
     </div>
 
-    <div id="tablediv">
-        <table border="1" id="table">
-            <thead>
-                <th>Número de cuenta</th>
-                <th>Nombre</th>
-                <th>Generacion</th>
-                <th>Facultad</th>
-                <th>Carrera</th>
-                <th>Modalidad de titulación</th>
-                <th>Sinodal (presidente)</th>
-                <th>Sinodal (secretario)</th>
-                <th>Sinodal (vocal)</th>
-                <th>Proyecto</th>
-                <th>Asesor</th>
-                <th>CoAsesor</th>
-            </thead>
-            <tbody id="bodyt">
-                <!-- Llenado dinamico -->
-            </tbody>
-        </table>
-    </div>
-    <h3 id="no-table-msg"></h3>
+    <footer>
+        <div class="container">
+            <p>Equipo Barragan Marquez Vega Sanchez Rivera | Sistema de Consulta de Titulación</p>
+        </div>
+    </footer>
 
-    <canvas id="graphic" height="500" width="800"></canvas>
+    <script src="index.js"></script>
 </body>
-<script src="index.js"></script>
 </html>
