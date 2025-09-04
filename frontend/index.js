@@ -544,12 +544,19 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             performSearch();
+            clearSearch();
         }
     });
 
     // Event listeners para búsqueda gráfica
-    searchBtnChart.addEventListener('click', performChartSearch);
-    clearBtnChart.addEventListener('click', clearSearch);
+    searchBtnChart.addEventListener('click', () => {
+        performChartSearch();
+        searchInput.value = '';
+    });
+    clearBtnChart.addEventListener('click', () => {
+        clearSearch();
+        performSearch();
+    });
 
     // Event listeners para botones de tipo de gráfico
     document.querySelectorAll('.chart-type-btn').forEach(btn => {
