@@ -8,11 +8,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
 public interface DegreeRepository extends JpaRepository<Degree, Long>, JpaSpecificationExecutor<Degree> {
     @Query("SELECT deg FROM Degree deg WHERE deg.date = :date AND deg.modality = :modality AND deg.project = :project")
-    Optional<Degree> findByAllData(@Param("date")Date date, @Param("modality")Modality modality,
+    Optional<Degree> findByAllData(@Param("date") LocalDate date, @Param("modality")Modality modality,
                                    @Param("project")Project project);
 }

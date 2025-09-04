@@ -77,6 +77,7 @@ public class StudentRegisterMapper {
         /* Saving up the teachers */
         List<DegreeTeacher> degreeTeachers = new ArrayList<>();
         for (String role : request.getTeachers().keySet()) {
+            if (request.getTeachers().get(role) == null) continue;
             degreeTeachers.add(
                 DegreeTeacher
                     .builder()
