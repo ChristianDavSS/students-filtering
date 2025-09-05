@@ -27,8 +27,8 @@ public class StudentController {
         studentService.registerStudent(request);
     }
 
-    @DeleteMapping
-    public void deleteStudentById(@RequestParam String id) {
+    @DeleteMapping("/{id}")
+    public void deleteStudentById(@PathVariable String id) {
         studentService.deleteStudentById(id);
     }
 
