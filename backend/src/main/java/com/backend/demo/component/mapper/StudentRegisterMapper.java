@@ -49,9 +49,9 @@ public class StudentRegisterMapper {
         if (request.getProject() != null) {
             /* Creating or obtaining the Degree object */
             project = projectRepository.findByName(request.getProject()).orElseGet(() ->
-                    projectRepository.save(
-                            Project.builder().name(request.getProject()).build()
-                    )
+                projectRepository.save(
+                        Project.builder().name(request.getProject()).build()
+                )
             );
         } else {
             project = null;
@@ -100,23 +100,23 @@ public class StudentRegisterMapper {
         degreeTeacherRepository.saveAll(degreeTeachers);
 
         studentRepository.save(
-                Student
-                    .builder()
-                    .id(request.getId_number())
-                    .name(request.getName())
-                    .generation(request.getGeneration())
-                    .career(
-                        careerRepository.findById(request.getCareerId()).orElseThrow(() ->
-                                new ResponseStatusException(HttpStatus.CONFLICT, "Career not found")
-                        )
+            Student
+                .builder()
+                .id(request.getId_number())
+                .name(request.getName())
+                .generation(request.getGeneration())
+                .career(
+                    careerRepository.findById(request.getCareerId()).orElseThrow(() ->
+                            new ResponseStatusException(HttpStatus.CONFLICT, "Career not found")
                     )
-                    .faculty(
-                        facultyRepository.findById(request.getFacultyId()).orElseThrow(()->
-                                new ResponseStatusException(HttpStatus.CONFLICT, "Faculty not found")
-                        )
+                )
+                .faculty(
+                    facultyRepository.findById(request.getFacultyId()).orElseThrow(()->
+                            new ResponseStatusException(HttpStatus.CONFLICT, "Faculty not found")
                     )
-                    .degree(degree)
-                    .build()
+                )
+                .degree(degree)
+                .build()
         );
     }
 }

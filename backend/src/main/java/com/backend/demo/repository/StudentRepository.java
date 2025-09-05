@@ -15,4 +15,10 @@ public interface StudentRepository extends JpaRepository<Student, String>, JpaSp
             " (:career IS NULL OR st.career = :career)" +
             " GROUP BY st.generation")
     List<Tuple> countStudentsByGeneration(@Param("faculty") Faculty faculty, @Param("career") Career career);
+
+    @Query("SELECT COUNT(st.id) FROM Student st JOIN st.degree deg WHERE deg = :degree")
+    Long countStudentsByDegree(@Param("degree") Degree degree);
+
+    @Query("SELECT COUNT(st.id) FROM Student st JOIN st.degree deg JOIN deg.project p WHERE p = :project")
+    Long countStudentsByProject(@Param("project") Project project);
 }

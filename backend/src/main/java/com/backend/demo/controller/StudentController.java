@@ -27,6 +27,11 @@ public class StudentController {
         studentService.registerStudent(request);
     }
 
+    @DeleteMapping
+    public void deleteStudentById(@RequestParam String id) {
+        studentService.deleteStudentById(id);
+    }
+
     /**
      * @param id, name, faculty, career: class to get the faculty, career, name or id_number from a student to filter
      * @return List<StudentDto>: Returns a list of the dto of the users matching the filters

@@ -1,15 +1,13 @@
 package com.backend.demo.service;
 
 import ch.qos.logback.core.util.StringUtil;
-import com.backend.demo.repository.CareerRepository;
-import com.backend.demo.repository.FacultyRepository;
-import com.backend.demo.repository.ModalityRepository;
-import com.backend.demo.repository.StudentRepository;
-import com.backend.demo.repository.entity.Career;
-import com.backend.demo.repository.entity.Faculty;
-import com.backend.demo.repository.entity.Modality;
+import com.backend.demo.repository.*;
+import com.backend.demo.repository.entity.*;
 import jakarta.persistence.Tuple;
+import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,13 +19,18 @@ public class ChartService {
     private final FacultyRepository facultyRepository;
     private final CareerRepository careerRepository;
     private final ModalityRepository modalityRepository;
+    private final DegreeRepository degreeRepository;
+    private final ProjectRepository projectRepository;
 
     public ChartService(StudentRepository studentRepository, FacultyRepository facultyRepository,
-                        CareerRepository careerRepository, ModalityRepository modalityRepository) {
+                        CareerRepository careerRepository, ModalityRepository modalityRepository, DegreeRepository degreeRepository,
+                        ProjectRepository projectRepository) {
         this.studentRepository = studentRepository;
         this.facultyRepository = facultyRepository;
         this.careerRepository = careerRepository;
         this.modalityRepository = modalityRepository;
+        this.degreeRepository = degreeRepository;
+        this.projectRepository = projectRepository;
     }
 
     public Map<String, Long> getData(Long facultyId, Long careerId, String generation, Long modalityId) {
@@ -57,5 +60,22 @@ public class ChartService {
         }
 
         return map;
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public void deleteStudentData(String id) {
+        Student student = studentRepository.findById(id).orElseThrow(()->
+            new ResponseStatusException(HttpStatus.CONFLICT, "Student not found")
+        );
+
+        if (studentRepository.countStudentsByDegree(student.getDegree()) <= 1) {
+            degreeRepository.delete(student.getDegree());
+            if (student.getDegree().getProject() != null &&
+                    studentRepository.countStudentsByProject(student.getDegree().getProject()) <= 1) {
+                projectRepository.delete(student.getDegree().getProject());
+            }
+        }
+
+        studentRepository.delete(student);
     }
 }

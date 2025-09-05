@@ -27,9 +27,9 @@ public class Degree {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    @OneToMany(mappedBy = "degree")
+    @OneToMany(mappedBy = "degree", cascade = CascadeType.REMOVE)
     private List<Student> students;
 
-    @OneToMany(mappedBy = "degree")
+    @OneToMany(mappedBy = "degree", cascade = CascadeType.REMOVE)
     private List<DegreeTeacher> degreeTeachers;
 }

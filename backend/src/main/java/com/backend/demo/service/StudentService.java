@@ -9,7 +9,9 @@ import com.backend.demo.repository.StudentRepository;
 import com.backend.demo.repository.entity.Student;
 import com.backend.demo.specification.StudentSpecification;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
@@ -22,14 +24,17 @@ public class StudentService {
     private final StudentMapper studentMapper;
     private final ChartService chartService;
     private final StudentRegisterMapper studentRegisterMapper;
+    private final DegreeService degreeService;
 
     public StudentService(StudentRepository studentRepository, StudentSpecification studentSpecification,
-                          StudentMapper studentMapper, ChartService chartService, StudentRegisterMapper studentRegisterMapper) {
+                          StudentMapper studentMapper, ChartService chartService, StudentRegisterMapper studentRegisterMapper,
+                          DegreeService degreeService) {
         this.studentRepository = studentRepository;
         this.studentSpecification = studentSpecification;
         this.studentMapper = studentMapper;
         this.chartService = chartService;
         this.studentRegisterMapper = studentRegisterMapper;
+        this.degreeService = degreeService;
     }
 
     public List<StudentDto> findAllByFilters(String id, String name, Long facultyId, Long careerId,
@@ -68,5 +73,9 @@ public class StudentService {
 
     public void registerStudent(StudentRegisterRequest request) {
         studentRegisterMapper.registerStudent(request);
+    }
+
+    public void deleteStudentById(String id) {
+        chartService.deleteStudentData(id);
     }
 }
