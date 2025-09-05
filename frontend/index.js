@@ -488,7 +488,7 @@ function getAppliedFilters() {
 }
 
 // Función para validar asesores 
-function validateTeachers() {
+function validateInputData() {
    const asesor = regAsesor.value;
    const coasesor = regCoasesor.value;
    const sinodal1 = regSinodal1.value; // Presidente
@@ -525,8 +525,26 @@ function validateTeachers() {
        alert('Error: El Asesor no puede ser la misma persona que el Co-asesor, Sinodal Presidente o Sinodal Secretario.');
        return false;
    }
-   
-   return true;
+
+   // Verificar que no se pueda graduar por obra si estudia ingeniería
+   if (regFacultad.options[regFacultad.selectedIndex].textContent.toLowerCase().includes("ingenier") &&
+                regModalidad.options[regModalidad.selectedIndex].textContent.toLowerCase().includes("obra")) {
+        alert("No puedes graduarte por obra artistica estudiando ingeniería");
+        return false;
+    }
+
+    // Verificar que el número de cuenta tenga valores numéricos
+    if (isNaN(Number(regNcta.value))) {
+        alert("El número de cuenta debe contener valores numéricos")
+        return false;
+    }
+
+    const years = regGeneracion.value.split("-")
+    if (Number(years[0]) >= Number(years[1])) {
+        alert("Debes ingresar una generación válida");
+        return false;
+    }
+    return true;
 }
 
 // --- Lógica del formulario de registro ---
@@ -603,7 +621,7 @@ exportBtn.addEventListener('click', exportToExcel);
 registerForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    if (!validateTeachers()) {
+    if (!validateInputData()) {
         return;
     }
 
