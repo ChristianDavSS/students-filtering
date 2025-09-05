@@ -14,15 +14,20 @@
 </head>
 <body>
     <header>
-        <div class="container">
-            <div class="header-content">
-                <h1 class="header-title">Consulta de Titulación UCOL</h1>
+    <div class="container">
+        <div class="header-content">
+            <h1 class="header-title">Consulta de Titulación UCOL</h1>
+            <div class="header-actions">
                 <button class="register-btn" id="registerBtn">
                     Registrar Nuevo Titulado
                 </button>
+                <button class="delete-btn" id="deleteBtn">
+                    Eliminar Titulado
+                </button>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
     <main class="container">
 
@@ -65,9 +70,31 @@
             </div>
         </section>
 
-        <section class="results-section">
+        <div class="results-section">
             <h3 class="results-title">Resultados de la búsqueda</h3>
+            <div class="results-actions">
+                <button class="export-btn" id="exportBtn">
+                    <i class="fas fa-file-excel"></i> Exportar a Excel
+                </button>
+            </div>
+        </div>
             
+            <div id="deleteModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn">&times;</span>
+                    <h2>Eliminar Titulado</h2>
+                    <form id="deleteForm">
+                        <p>Confirma el número de cuenta del titulado que deseas eliminar.</p>
+                        <div class="form-group">
+                            <label for="deleteNcta">Número de Cuenta</label>
+                            <input type="text" id="deleteNcta" minlength="8" maxlength="8" required>
+                        </div>
+                        <button type="submit" class="submit-btn delete">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+
+
             <div class="loading" id="loading">
                 <div class="spinner"></div>
                 <p>Buscando datos...</p>

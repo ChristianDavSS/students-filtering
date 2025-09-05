@@ -494,6 +494,40 @@ footer {
     margin: 0 auto 15px;
 }
 
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.delete-btn, .export-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.delete-btn:hover, .export-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.table-container {
+    overflow-y: auto;
+    max-height: 500px; /* Límite de altura para 5-6 registros */
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+}
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }

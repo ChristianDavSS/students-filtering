@@ -42,6 +42,14 @@ const regCoasesor = document.getElementById('regCoasesor');
 const regSinodal1 = document.getElementById('regSinodalPresidente');
 const regSinodal2 = document.getElementById('regSinodalSecretario');
 const regSinodal3 = document.getElementById('regSinodalVocal');
+
+// Nuevos elementos del DOM para eliminación y exportación
+const deleteBtn = document.getElementById('deleteBtn');
+const exportBtn = document.getElementById('exportBtn');
+const deleteModal = document.getElementById('deleteModal');
+const deleteForm = document.getElementById('deleteForm');
+const deleteNcta = document.getElementById('deleteNcta');
+
 const modalidadesConAsesor = [
     "Tesis", 
     "Tesina", 
@@ -60,7 +68,7 @@ let currentChartType = 'bar';
 // Para guardar los datos de las gráficas al cambiar el tipo
 let labels, values;
 
-// Paleta de colores minimalista
+// Paleta de colores 
 const colors = {
     primary: ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe', '#a8edea', '#fed6e3'],
     backgrounds: [
@@ -417,6 +425,110 @@ function clearSearch() {
     }
 }
 
+// Función para eliminar un estudiante
+async function deleteStudent() {
+    const ncta = deleteNcta.value;
+    if (!ncta || ncta.length !== 8) {
+        alert("Por favor, introduce un número de cuenta válido de 8 dígitos.");
+        return;
+    }
+    try {
+        await axios.delete(`http://localhost:8080/student/${ncta}`);
+        alert(`Titulado con cuenta ${ncta} eliminado con éxito.`);
+        deleteModal.style.display = 'none';
+        deleteForm.reset();
+        performSearch();
+    } catch (e) {
+        if (e.response && e.response.status === 404) {
+            alert("No se encontró un titulado con ese número de cuenta.");
+        } else {
+            alert("Ocurrió un error al intentar eliminar el titulado.");
+        }
+    }
+}
+
+// Función para exportar la tabla a Excel
+function exportToExcel() {
+    const table = document.getElementById('resultsTable');
+    if (!table || table.rows.length <= 1) {
+        alert('No hay datos en la tabla para exportar.');
+        return;
+    }
+    
+    const workbook = XLSX.utils.table_to_book(table, { sheet: "Titulados UCOL" });
+    const filters = getAppliedFilters();
+    const worksheet = workbook.Sheets["Titulados UCOL"];
+    
+    // Añadir título y filtros
+    XLSX.utils.sheet_add_aoa(worksheet, [[`Reporte de Titulados - Filtros: ${filters}`]], { origin: "A1" });
+    
+    XLSX.writeFile(workbook, 'Titulados_UCOL.xlsx');
+}
+
+// Función para obtener los filtros aplicados
+function getAppliedFilters() {
+    let filters = [];
+    const searchVal = searchInput.value.trim();
+    if (searchVal) {
+        filters.push(`${filterSelect.options[filterSelect.selectedIndex].text}: ${searchVal}`);
+    }
+    if (facultySelectChart.value) {
+        filters.push(`Facultad: ${facultySelectChart.options[facultySelectChart.selectedIndex].text}`);
+    }
+    if (careerSelectChart.value) {
+        filters.push(`Carrera: ${careerSelectChart.options[careerSelectChart.selectedIndex].text}`);
+    }
+    if (generationSelectChart.value) {
+        filters.push(`Generación: ${generationSelectChart.value}`);
+    }
+    if (modalitySelectChart.value) {
+        filters.push(`Modalidad: ${modalitySelectChart.options[modalitySelectChart.selectedIndex].text}`);
+    }
+    return filters.join(' | ') || 'Ninguno';
+}
+
+// Función para validar asesores 
+function validateTeachers() {
+   const asesor = regAsesor.value;
+   const coasesor = regCoasesor.value;
+   const sinodal1 = regSinodal1.value; // Presidente
+   const sinodal2 = regSinodal2.value; // Secretario
+   const sinodal3 = regSinodal3.value; // Vocal
+   
+   // Verificar que coasesor no sea igual a ningún otro (excepto vacío)
+   if (coasesor && [asesor, sinodal1, sinodal2, sinodal3].includes(coasesor)) {
+       alert('Error: El Co-asesor no puede ser la misma persona que el Asesor o cualquiera de los Sinodales.');
+       return false;
+   }
+   
+   // Verificar que sinodal presidente no sea igual a otros (excepto vacío)
+   if (sinodal1 && [asesor, coasesor, sinodal2, sinodal3].includes(sinodal1)) {
+       alert('Error: El Sinodal Presidente no puede ser la misma persona que el Asesor, Co-asesor o los otros Sinodales.');
+       return false;
+   }
+   
+   // Verificar que sinodal secretario no sea igual a otros (excepto vacío)
+   if (sinodal2 && [asesor, coasesor, sinodal1, sinodal3].includes(sinodal2)) {
+       alert('Error: El Sinodal Secretario no puede ser la misma persona que el Asesor, Co-asesor o los otros Sinodales.');
+       return false;
+   }
+   
+   // Verificar sinodal vocal - PUEDE ser igual al asesor, pero no a otros
+   if (sinodal3 && [coasesor, sinodal1, sinodal2].includes(sinodal3)) {
+       alert('Error: El Sinodal Vocal no puede ser la misma persona que el Co-asesor, Sinodal Presidente o Sinodal Secretario.');
+       return false;
+   }
+   
+   // Verificar que asesor no sea igual a coasesor, sinodal1 o sinodal2
+   // (puede ser igual a sinodal3/vocal)
+   if (asesor && [coasesor, sinodal1, sinodal2].includes(asesor)) {
+       alert('Error: El Asesor no puede ser la misma persona que el Co-asesor, Sinodal Presidente o Sinodal Secretario.');
+       return false;
+   }
+   
+   return true;
+}
+
 // --- Lógica del formulario de registro ---
 registerBtn.addEventListener('click', () => {
     registerModal.style.display = 'block';
@@ -435,6 +547,9 @@ window.addEventListener('click', (event) => {
     if (event.target == registerModal) {
         registerModal.style.display = 'none';
     }
+    if (event.target == deleteModal) {
+        deleteModal.style.display = 'none';
+    }
 });
 
 // Lógica para mostrar/ocultar campos de asesor
@@ -443,7 +558,6 @@ regModalidad.addEventListener('change', () => {
 
     if (modalidadesConAsesor.includes(selectedModalidad)) {
         asesorField.classList.remove('hidden');
-        coasesorField.classList.remove('hidden');
         coasesorField.classList.remove('hidden');
         proyectoField.classList.remove('hidden');
         regAsesor.setAttribute('required', 'true');
@@ -462,8 +576,36 @@ regModalidad.addEventListener('change', () => {
     }
 });
 
+// Event listener para las carreras dependientes de una facultad
+facultySelectChart.addEventListener("change", () => {
+    getSelectData("career", {facultyId: facultySelectChart.value}, careerSelectChart);
+});
+
+// Event listener para el filtro dinámico de facultades/carreras en el modal de registro
+regFacultad.addEventListener('change', () => {
+    getSelectData("career", {facultyId: regFacultad.value}, regCarrera);
+    regCarrera.disabled = regFacultad.value === "";
+});
+
+// Nuevos Event Listeners
+deleteBtn.addEventListener('click', () => {
+    deleteModal.style.display = 'block';
+});
+
+deleteForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    deleteStudent();
+});
+
+exportBtn.addEventListener('click', exportToExcel);
+
+// Formulario de registro modificado con validación
 registerForm.addEventListener('submit', (event) => {
     event.preventDefault();
+
+    if (!validateTeachers()) {
+        return;
+    }
 
     const registerStudent = async () => {
         const params = {
@@ -486,32 +628,23 @@ registerForm.addEventListener('submit', (event) => {
 
         try{
             await axios.post("http://localhost:8080/student", params)
+            alert('¡Titulado registrado con éxito!');
+            registerModal.style.display = 'none';
+            registerForm.reset();
+            performSearch();
         } catch (e) {
-            if (e.response.status === 409) alert("Este usuario ya está registrado.")
+            if (e.response.status === 409) {
+                alert("Este usuario ya está registrado.")
+            } else {
+                alert("Ocurrió un error al registrar el titulado.");
+            }
         }
     }
 
     registerStudent();
-
-    alert('¡Titulado registrado con éxito!');
-    registerModal.style.display = 'none';
-    registerForm.reset();
-    // Actualizar la tabla
-    performSearch();
 });
 
-// Event listener para las carreras dependientes de una facultad
-facultySelectChart.addEventListener("change", () => {
-    getSelectData("career", {facultyId: facultySelectChart.value}, careerSelectChart);
-});
-
-// Event listener para el filtro dinámico de facultades/carreras en el modal de registro
-regFacultad.addEventListener('change', () => {
-    getSelectData("career", {facultyId: regFacultad.value}, regCarrera);
-    regCarrera.disabled = regFacultad.value === "";
-});
-
-// Event Listeners - SIN DUPLICACIÓN
+// Event Listeners - Inicialización
 document.addEventListener('DOMContentLoaded', () => {
     // Función para obtener los datos iniciales de la tabla.
     const getTeachers = async () => {
