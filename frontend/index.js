@@ -54,7 +54,8 @@ const modalidadesConAsesor = [
     "Tesis", 
     "Tesina", 
     "Articulo de investigación", 
-    "Sistematización de experiencia profesional"
+    "Sistematización de experiencia profesional",
+    "Obra artística"
 ];
 
 // Campos de asesor/coasesor para mostrar/ocultar
