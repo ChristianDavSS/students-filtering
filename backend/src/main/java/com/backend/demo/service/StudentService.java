@@ -5,9 +5,12 @@ import com.backend.demo.component.dto.StudentDto;
 import com.backend.demo.component.mapper.StudentMapper;
 import com.backend.demo.component.mapper.StudentRegisterMapper;
 import com.backend.demo.component.request.StudentRegisterRequest;
+import com.backend.demo.repository.DegreeRepository;
+import com.backend.demo.repository.ProjectRepository;
 import com.backend.demo.repository.StudentRepository;
 import com.backend.demo.repository.entity.Student;
 import com.backend.demo.specification.StudentSpecification;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,19 +25,19 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final StudentSpecification studentSpecification;
     private final StudentMapper studentMapper;
-    private final ChartService chartService;
+    private final DegreeRepository degreeRepository;
+    private final ProjectRepository projectRepository;
     private final StudentRegisterMapper studentRegisterMapper;
-    private final DegreeService degreeService;
 
     public StudentService(StudentRepository studentRepository, StudentSpecification studentSpecification,
-                          StudentMapper studentMapper, ChartService chartService, StudentRegisterMapper studentRegisterMapper,
-                          DegreeService degreeService) {
+                          StudentMapper studentMapper, StudentRegisterMapper studentRegisterMapper,
+                          DegreeRepository degreeRepository, ProjectRepository projectRepository) {
         this.studentRepository = studentRepository;
         this.studentSpecification = studentSpecification;
         this.studentMapper = studentMapper;
-        this.chartService = chartService;
+        this.degreeRepository = degreeRepository;
+        this.projectRepository = projectRepository;
         this.studentRegisterMapper = studentRegisterMapper;
-        this.degreeService = degreeService;
     }
 
     public List<StudentDto> findAllByFilters(String id, String name, Long facultyId, Long careerId,
@@ -76,7 +79,24 @@ public class StudentService {
         studentRegisterMapper.registerStudent(request);
     }
 
+    /**
+     * Delete method for student:
+     * This method checks if there´s more than one student on a project and on a degree to delete them on cascade.
+     * */
+    @Transactional(rollbackOn = Exception.class)
     public void deleteStudentById(String id) {
-        chartService.deleteStudentData(id);
+        Student student = studentRepository.findById(id).orElseThrow(()->
+                new ResponseStatusException(HttpStatus.CONFLICT, "Student not found")
+        );
+
+        if (studentRepository.countStudentsByDegree(student.getDegree()) <= 1) {
+            degreeRepository.delete(student.getDegree());
+            if (student.getDegree().getProject() != null &&
+                    studentRepository.countStudentsByProject(student.getDegree().getProject()) <= 1) {
+                projectRepository.delete(student.getDegree().getProject());
+            }
+        }
+
+        studentRepository.delete(student);
     }
 }

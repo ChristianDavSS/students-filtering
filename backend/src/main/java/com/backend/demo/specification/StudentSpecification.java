@@ -3,10 +3,8 @@ package com.backend.demo.specification;
 import ch.qos.logback.core.util.StringUtil;
 import com.backend.demo.repository.entity.Student;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Tuple;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
