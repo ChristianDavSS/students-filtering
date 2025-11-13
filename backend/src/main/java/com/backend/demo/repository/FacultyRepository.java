@@ -11,9 +11,4 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FacultyRepository extends JpaRepository<Faculty, Long>, JpaSpecificationExecutor<Faculty> {
-    Optional<Faculty> findByName(String faculty);
-
-    @Query("SELECT f.name AS name, COUNT(st.id) AS quantity" +
-            " FROM Student st JOIN st.faculty f GROUP BY f.name")
-    List<Tuple> countStudentsByFaculty();
 }

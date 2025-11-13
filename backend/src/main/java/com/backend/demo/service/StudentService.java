@@ -68,7 +68,8 @@ public class StudentService {
     }
 
     public Map<String, Long> getChartData(Long facultyId, Long careerId, String generation, Long modalityId) {
-        return chartService.getData(facultyId, careerId, generation, modalityId);
+        return studentSpecification.filterBy(facultyId, careerId, generation, modalityId);
+        //return chartService.getData(facultyId, careerId, generation, modalityId);
     }
 
     public void registerStudent(StudentRegisterRequest request) {
