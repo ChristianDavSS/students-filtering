@@ -14,9 +14,9 @@ public class Student {
     @Id
     @Column(length = 8)
     private String id;
-    @Column(nullable = false)
+    @Column(length = 80, nullable = false)
     private String name;
-    @Column(nullable = false)
+    @Column(length = 9, nullable = false)
     private String generation;
 
     @ManyToOne
