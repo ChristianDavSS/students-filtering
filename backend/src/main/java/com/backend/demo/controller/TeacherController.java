@@ -1,23 +1,10 @@
 package com.backend.demo.controller;
 
-import com.backend.demo.component.dto.NameDto;
-import com.backend.demo.service.TeacherService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/teachers")
 public class TeacherController {
-    private final TeacherService teacherService;
-    public TeacherController(TeacherService teacherService) {
-        this.teacherService = teacherService;
-    }
-
-    @GetMapping
-    public List<NameDto> getAllTeachers() {
-        return teacherService.getAllTeachers();
-    }
 }

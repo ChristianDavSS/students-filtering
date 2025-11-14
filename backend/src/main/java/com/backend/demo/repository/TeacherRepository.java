@@ -1,10 +1,7 @@
 package com.backend.demo.repository;
 
-import com.backend.demo.repository.entity.Project;
 import com.backend.demo.repository.entity.Teacher;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface TeacherRepository extends JpaRepository<Teacher, Long>, JpaSpecificationExecutor<Teacher> {
-    Boolean existsByDegreeTeachers_Degree_Project(Project project);
+public interface TeacherRepository extends MongoRepository<Teacher, String> {
 }

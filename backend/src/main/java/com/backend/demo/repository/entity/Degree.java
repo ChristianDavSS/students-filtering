@@ -1,35 +1,29 @@
 package com.backend.demo.repository.entity;
 
-import jakarta.persistence.*;
+import com.backend.demo.repository.enums.Role;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.util.Date;
+import java.util.Map;
 
-@Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Document(collection = "Degree")
 public class Degree {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    private Date date;
 
-    @Column(nullable = false)
-    private LocalDate date;
+    // References
+    private String modality;
+    private String project;
 
-    @ManyToOne
-    @JoinColumn(name = "modality_id", nullable = false)
-    private Modality modality;
-
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
-
-    @OneToMany(mappedBy = "degree", cascade = CascadeType.REMOVE)
-    private List<Student> students;
-
-    @OneToMany(mappedBy = "degree", cascade = CascadeType.REMOVE)
-    private List<DegreeTeacher> degreeTeachers;
+    // Anidado
+    private Map<Role, String> teachers;
 }

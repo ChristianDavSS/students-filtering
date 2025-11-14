@@ -1,28 +1,20 @@
 package com.backend.demo.repository.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Document(collection = "Career")
 public class Career {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(length = 80, nullable = false, unique = true)
+    private String id;
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "faculty_id", nullable = false)
-    private Faculty faculty;
-
-    @OneToMany(mappedBy = "career")
-    private List<Student> students;
-
+    private List<String> teachers;
 }

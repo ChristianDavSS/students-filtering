@@ -1,23 +1,18 @@
 package com.backend.demo.repository.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Document(collection = "Modality")
 public class Modality {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(length = 50, nullable = false, unique = true)
+    private String id;
     private String name;
-
-    @OneToMany(mappedBy = "modality")
-    private List<Degree> degrees;
 }
