@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface DegreeRepository extends MongoRepository<Degree, String> {
     Optional<Degree> findDegreeByDateAndModalityAndProjectAndTeachers(Date date, String modality, String project,
                                                                       Map<Role, String> teachers);
+    Long countDegreesByProject(String projectId);
 }
