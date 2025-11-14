@@ -14,5 +14,6 @@ import java.util.List;
 public class Teacher {
     @Id
     private String id;
+    private String teacher_id;
     private String name;
 }
