@@ -11,6 +11,7 @@ import com.backend.demo.repository.entity.Project;
 import com.backend.demo.repository.entity.Student;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpServerErrorException;
 
 @Component
@@ -28,6 +29,7 @@ public class StudentRegisterHelper {
         this.studentRepository = studentRepository;
     }
 
+    @Transactional
     public Student registerStudent(StudentRegisterRequest request) {
         // If there´s already a student with their ID we throw an error.
         if (studentRepository.existsByStudentId(request.getStudentId())) {

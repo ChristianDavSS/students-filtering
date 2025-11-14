@@ -1,6 +1,7 @@
 package com.backend.demo.controller;
 
 import com.backend.demo.component.request.StudentRegisterRequest;
+import com.backend.demo.component.response.StudentResponse;
 import com.backend.demo.repository.entity.Student;
 import com.backend.demo.service.StudentService;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> getAllStudents() {
+    public List<StudentResponse> getAllStudents() {
         return this.studentService.getAllStudents();
     }
 }
