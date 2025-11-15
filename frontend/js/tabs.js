@@ -1,4 +1,5 @@
 // Global variables
+// Tabs or sections
 const tabs = document.querySelectorAll(".tab")
 const individual_tabs = document.querySelectorAll(".ind-tab");
 const management_tabs = document.querySelectorAll(".management-tab");
@@ -6,6 +7,7 @@ const management_tabs = document.querySelectorAll(".management-tab");
 // Dynamic general section selection
 document.querySelectorAll(".section-btn").forEach((btn, i) => {
     btn.addEventListener("click", () => {
+        // Set the section as active
         tabs.forEach(t => t.classList.remove("active"));
         tabs[i].classList.add("active");
     });
@@ -14,6 +16,7 @@ document.querySelectorAll(".section-btn").forEach((btn, i) => {
 // Dynamic selection of the individual filter section
 document.querySelectorAll(".individual-btn").forEach((btn, i) => {
     btn.addEventListener("click", () => {
+        // Set the section as active
         individual_tabs.forEach(t => t.classList.remove("active"));
         individual_tabs[i].classList.add("active");
     });
@@ -22,6 +25,7 @@ document.querySelectorAll(".individual-btn").forEach((btn, i) => {
 // Dynamic selection of the management
 document.querySelectorAll(".management-btn").forEach((btn, i) => {
     btn.addEventListener("click", () => {
+        // Set the section as active
         management_tabs.forEach(t => t.classList.remove("active"));
         management_tabs[i].classList.add("active");
     });

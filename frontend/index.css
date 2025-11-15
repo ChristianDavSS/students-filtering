@@ -1,4 +1,210 @@
-/*SHOW OR HIDE DYNAMIC HTML CONTENT*/
+/* GENERAL STYLES */
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: #fcf7f7;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+button {
+    background-color: white;
+    border-radius: 0.5vh;
+    font-weight: bold;
+    padding: 0.5vh;
+    margin: 1vh;
+    cursor: pointer;
+}
+
+select {
+    appearance: none;
+    background: #fafafa;
+    border: 1px solid #ccc;
+    padding: 8px 32px 8px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath fill='%23888' d='M5 7l3 3 3-3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+input {
+    background: #fafafa;        /* más claro */
+    border: 1px solid #e0e0e0;  /* gris muy suave */
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+}
+
+form {
+    padding: 1vh;
+}
+/*
+    Header styles
+*/
+#header {
+    display: flex;
+    align-items: center;
+    background-color: white; /* Fondo blanco */
+    padding: 2vh 3vh;
+    border-radius: 1vh;
+    color: black; /* Texto negro */
+    border: 1px solid #e0e0e0; /* Opcional: borde suave */
+    margin-bottom: 2.5vh;
+}
+
+.header-icon {
+    background-color: blue; /* Azul */
+    padding: 1vh;
+    border-radius: 1vh;
+    margin-right: 2vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-icon img {
+    height: 3.2vh;
+    width: 3.2vh; /* Mantener icono blanco */
+}
+
+.invert {
+    filter: invert(100%);
+}
+
+.header-text h1 {
+    margin: 0;
+    font-size: 2.4vh;
+    font-weight: 600;
+}
+
+.header-text p {
+    margin: 0;
+    font-size: 1.8vh;
+    opacity: 0.75;
+}
+
+/*
+    Section buttons
+*/
+.section-container {
+    display: flex;
+    background-color: #eef0f4; /* gris muy claro */
+    padding: 0.6vh;
+    border-radius: 5vh;
+    width: fit-content;
+    margin: 2vh auto;
+}
+
+.section-btn, .management-btn {
+    background: transparent;
+    font-weight: bold;
+    border: none;
+    padding: 1vh 2.5vh;
+    font-size: 1.7vh;
+    border-radius: 4vh;
+    cursor: pointer;
+    color: black;
+    transition: 0.2s;
+}
+
+/*.section-btn.active, .management-btn.active {
+    background-color: white;
+    font-weight: bold;
+    box-shadow: 0 0 3px rgba(0,0,0,0.1);
+}*/
+
+/*
+    Tab styles
+*/
+.tab {
+    max-width: 135vh;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.tab-title {
+    display: flex;
+    align-items: center; /* Centra verticalmente */
+    gap: 8px; /* Espacio entre imagen y texto */
+    width: fit-content;
+    margin-bottom: 0.5px;
+}
+
+.tab p {
+    margin-top: 0.5px;
+}
+
+/*
+    Filter SelectBox Style
+*/
+#filter-selects {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Select centrado */
+}
+
+.filter-group label {
+    width: 90%;          /* Mismo ancho que el select */
+    text-align: left;    /* Alineado a la izquierda */
+    margin-bottom: 0.2rem;
+}
+
+#filter-selects select {
+    width: 90%;
+}
+
+
+/*
+    FORMS
+*/
+.register-section {
+    background-color: white;
+    border-radius: 0.4vh;
+    .tab-title, p {
+        margin-left: 1vh;
+    }
+}
+
+.register-form {
+    column-count: 2;
+    column-gap: 30px;
+}
+
+.register-group {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/*
+    DELETE Button
+*/
+.delete-btn {
+    background-color: red;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        height: 25px;
+    }
+}
+
+/* SHOW OR HIDE DYNAMIC HTML CONTENT */
 .tab, .ind-tab, .management-tab {
     display: none;
 }

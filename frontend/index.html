@@ -3,67 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema</title>
+    <title>Sistema de filtrado de estudiantes</title>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <header id="header-content">
-        <h2>Sistema de filtrado de estudiantes</h2>
-        <p>Gestión y análisis de información académica</p>
+    <header id="header">
+        <div class="header-icon">
+            <img src="ui/icons/school_icon.png" alt="school-icon" class="invert">
+        </div>
+
+        <div class="header-text">
+            <h1>Sistema de filtrado de estudiantes</h1>
+            <p>Gestión y análisis de información académica</p>
+        </div>
     </header>
 
-    <button class="section-btn">Filtrado Individual</button>
-    <button class="section-btn">Filtrado General</button>
-    <button class="section-btn">Gestión</button>
+    <div class="section-container">
+        <button class="section-btn">Filtrado Individual</button>
+        <button class="section-btn">Filtrado General</button>
+        <button class="section-btn">Gestión</button>
+    </div>
 
-    <section class="tab">
+    <section class="tab" style="background-color: white; border-radius: 0.4vh; padding: 1vh;">
         <!-- Section for the individual filters -->
-         <h3>Búsqueda Individual</h3>
-         <p>Busca un estudiante egresado por número de cuenta o nombre</p>
+        <div class="tab-title">
+            <img src="ui/icons/search-icon.png" alt="search">
+            <h3>Búsqueda Individual</h3>
+        </div>
+        <p>Busca un estudiante egresado por número de cuenta o nombre</p>
 
-         <!-- Buttons for the dynamic content -->
-         <button class="individual-btn">Por Número de Cuenta</button>
-         <button class="individual-btn">Por Nombre</button>
+        <!-- Buttons for the dynamic content -->
+        <button class="individual-btn">Por Número de Cuenta</button>
+        <button class="individual-btn">Por Nombre</button>
 
          <!-- Sección para el número de cuenta -->
          <section class="ind-tab active">
             <label for="studentId">Número de Cuenta</label>
-            <input type="text" name="studentId" id="studentId-filter-input">
+            <input type="text" name="studentId" id="studentId-filter-input" placeholder="Ej: 20207485">
          </section>
+
          <section class="ind-tab">
             <label for="student-name">Nombre del Estudiante</label>
-            <input type="text" name="student-name" id="student-name-input">
+            <input type="text" name="student-name" id="student-name-input" placeholder="Ej: Christian Sánchez">
          </section>
     </section>
 
     <section class="tab active">
         <!-- Section to make the general filters -->
-        <div id="general-filters">
-            <h3>Filtro de busqueda</h3>
-            <p>Aplica filtros para analizar a los estudiantes egresados.</p>
+        <div id="general-filters" style="background-color: white; border-radius: 0.4vh; padding: 1vh;">
+            <div class="tab-title" style="margin-left: 1vh;">
+                <img src="ui/icons/filter-icon.png" alt="filter-icon">
+                <h3>Filtro de busqueda</h3>
+            </div>
+            <p style="margin-left: 1.5vh;">Aplica filtros para analizar a los estudiantes egresados.</p>
 
             <!-- Dynamic Selectbox -->
-            <label for="faculty">Facultad</label>
-            <select name="faculty" id="faculty-select"></select>
+            <div id="filter-selects">
+                <div class="filter-group">
+                    <label for="faculty">Facultad</label>
+                    <select name="faculty" id="faculty-select"></select>
+                </div>
 
-            <label for="career">Carrera</label>
-            <select name="career" id="career-select"></select>
+                <div class="filter-group">
+                    <label for="career">Carrera</label>
+                    <select name="career" id="career-select"></select>
+                </div>
 
-            <label for="generation">Generación</label>
-            <select name="generation" id="generation-select"></select>
+                <div class="filter-group">
+                    <label for="generation">Generación</label>
+                    <select name="generation" id="generation-select"></select>
+                </div>
 
-            <label for="modality">Modalidad</label>
-            <select name="modality" id="modality-select"></select>
+                <div class="filter-group">
+                    <label for="modality">Modalidad</label>
+                    <select name="modality" id="modality-select"></select>
+                </div>
+            </div>
+            <button>Limpiar filtros</button>
         </div>
 
-        <!-- Section for the canvas (graphs) -->
-        <div id="chart-section">
+        <!-- Section for the canvas (charts) -->
+        <div id="chart-section" style="background-color: white; border-radius: 0.4vh; margin: 2vh; padding: 1vh;">
             <canvas id="chart-canvas">
             </canvas>
         </div>
 
         <!-- Section for the results table -->
-        <div id="general-table-section">
+        <div id="general-table-section" style="background-color: white; border-radius: 0.4vh; padding: 1vh;">
             <h3>Resultados del filtrado</h3>
             <p>Lista de estudiantes que coinciden con los criterios seleccionados.</p>
             <table id="general-table">
@@ -92,49 +118,150 @@
 
     <section class="tab">
         <!-- Management section -->
-        <button class="management-btn">Estudiantes</button>
-        <button class="management-btn">Profesores</button>
+         <div class="section-container">
+            <button class="management-btn">Estudiantes</button>
+            <button class="management-btn">Profesores</button>
+        </div>
 
         <section class = "management-tab active">
             <!-- Register student form -->
-             <form action="">
-                <h3>Añadir un nuevo estudiante</h3>
+            <div class="register-section">
+                <div class="tab-title">
+                    <img src="ui/icons/add-icon.png" alt="add-icon">
+                    <h3>Añadir un nuevo egresado</h3>
+                </div>
                 <p>Registra un nuevo egresado en el sistema</p>
-                <label for="studentId">Número de cuenta</label>
-                <input type="text" name="studentId" id="studentId" minlength="8" maxlength="8">
-                <button>Añadir</button>
-             </form>
+                <form action="" class="register-form">
+                    <div class="register-group">
+                        <label for="studentId">Número de cuenta</label>
+                        <input type="text" name="studentId" id="studentId" minlength="8" maxlength="8">
+                    </div>
+
+                    <div class="register-group">
+                        <label for="name">Nombre(s)</label>
+                        <input type="text" name="name" id="name">
+                    </div>
+
+                    <div class="register-group">
+                        <label for="generation">Generación</label>
+                        <input type="text" name="generation" id="generation">
+                    </div>
+
+                    <div class="register-group">
+                        <label for="facultyId">Facultad</label>
+                        <select name="facultyId" id="facultyId"></select>
+                    </div>
+
+                    <div class="register-group">
+                        <label for="careerId">Carrera</label>
+                        <select name="careerId" id="careerId"></select>
+                    </div>
+
+                    <div class="register-group">
+                        <label for="date">Fecha de egreso</label>
+                        <input type="date" name="date" id="date">
+                    </div>
+
+                    <div class="register-group">
+                        <label for="modalityId">Modalidad</label>
+                        <select name="modalityId" id="modalityId"></select>
+                    </div>
+
+                    <div class="register-group">
+                        <label for="sinodal_presidente">Sinodal Presidente</label>
+                        <input type="text" name="sinodal_presidente" id="sinodal_presidente">
+                    </div>
+
+                    <div class="register-group">
+                        <label for="sinodal_secretario">Sinodal Secretario</label>
+                        <input type="text" name="sinodal_secretario" id="sinodal_secretario">
+                    </div>
+
+                    <div class="register-group">
+                        <label for="sinodal_vocal">Sinodal Vocal</label>
+                        <input type="text" name="sinodal_vocal" id="sinodal_vocal">
+                    </div>
+
+                    <div class="register-group">
+                        <label for="project">Nombre del proyecto</label>
+                        <input type="text" name="project" id="project">
+                    </div>
+
+                    <div class="register-group">
+                        <label for="asesor">Asesor</label>
+                        <input type="text" name="asesor" id="asesor">
+                    </div>
+
+                    <div class="register-group">
+                        <label for="coasesor">Coasesor</label>
+                        <input type="text" name="coasesor" id="coasesor">
+                    </div>
+                    <button style="width: 8vh; text-align: center;">Añadir</button>
+                </form>
+            </div>
 
              <!-- Remove student form -->
-            <form action="">
-                <h3>Eliminar un egresado</h3>
+            <div class="register-section">
+                <div class="tab-title">
+                    <img src="ui/icons/delete-icon.png" alt="delete">
+                    <h3>Eliminar un egresado</h3>
+                </div>
                 <p>Eliminar un egresado mediante su número de cuenta</p>
-                <label for="studentId">Número de cuenta</label>
-                <input type="text" name="studentId" id="studentId" minlength="8" maxlength="8">
-                <button>Eliminar</button>
-             </form>
+                <form action="" class="register-form">
+                    <div class="register-group">
+                        <label for="studentId">Número de cuenta</label>
+                        <input type="text" name="studentId" id="studentId" minlength="8" maxlength="8" placeholder="Ej: 20207485">
+                    </div>
+                    <button class="delete-btn">
+                        <img src="ui/icons/delete-icon.png" alt="delete-icon" class="invert">
+                        Eliminar
+                    </button>
+                </form>
+             </div>
         </section>
 
         <section class = "management-tab">
-            <!-- Register student form -->
-             <form action="">
-                <h3>Añadir un nuevo profesor</h3>
+            <!-- Register teacher form -->
+            <div class="register-section">
+                <div class="tab-title">
+                    <img src="ui/icons/add-icon.png" alt="add-icon">
+                    <h3>Añadir un nuevo profesor</h3>
+                </div>
                 <p>Registra un nuevo profesor en el sistema</p>
-                <label for="studentId">Número de trabajador</label>
-                <input type="text" name="studentId" id="studentId" minlength="4" maxlength="4">
-                <button>Añadir</button>
-             </form>
+                <form action="" class="register-form">
+                    <div class="register-group">
+                        <label for="teacherId">Número de trabajador</label>
+                        <input type="text" name="teacherId" id="teacherId" minlength="4" maxlength="4">
+                    </div>
+
+                    <div class="register-group">
+                        <label for="name">Nombre del profesor</label>
+                        <input type="text" name="name" id="name">
+                    </div>
+                    <div class="register-group">
+                        <button style="width: 8vh; text-align: center;">Eliminar</button>
+                    </div>
+                </form>
+            </div>
 
              <!-- Remove student form -->
-            <form action="">
-                <h3>Eliminar un profesor</h3>
+            <div class="register-section">
+                <div class="tab-title">
+                    <img src="ui/icons/delete-icon.png" alt="delete">
+                    <h3>Eliminar un profesor</h3>
+                </div>
                 <p>Eliminar un profesor mediante su número de trabajador</p>
-                <label for="studentId">Número de trabajador</label>
-                <input type="text" name="studentId" id="studentId" minlength="4" maxlength="4">
-                <button>Eliminar</button>
-             </form>
+                <form action="" class="register-form">
+                    <label for="studentId">Número de trabajador</label>
+                    <input type="text" name="studentId" id="studentId" minlength="4" maxlength="4" placeholder="Ej: 1345">
+                    <button class="delete-btn">
+                        <img src="ui/icons/delete-icon.png" alt="delete-icon" class="invert">
+                        Eliminar
+                    </button>
+                </form>
+            </div>
         </section>
     </section>
 </body>
-<script src="index.js"></script>
+<script src="js/tabs.js"></script>
 </html>
