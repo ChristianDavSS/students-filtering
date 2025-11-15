@@ -93,32 +93,21 @@ public class StudentHelper {
         ops.add(Aggregation.lookup("Degree", "degreeObjId", "_id", "degree"));
         ops.add(Aggregation.unwind("degree"));
 
-        // Flag to control the criteria
-        boolean flag = false;
-
         if (!StringUtil.isNullOrEmpty(facultyId)) {
             criteria = criteria.and("facultyId").is(facultyId);
-            flag = true;
         }
         if (!StringUtil.isNullOrEmpty(careerId)) {
             criteria = criteria.and("careerId").is(careerId);
-            flag = true;
         }
         if (!StringUtil.isNullOrEmpty(generation)) {
             criteria = criteria.and("generation").is(generation);
-            flag = true;
         }
         if (!StringUtil.isNullOrEmpty(modalityId)) {
-            criteria = criteria.and("modality").is(modalityId);
-            flag = true;
+            criteria = criteria.and("degree.modality").is(modalityId);
         }
 
-        // If there were a criteria we match it
-        if (flag) {
-            ops.add(Aggregation.match(criteria));
-        } else {
-            ops.add(Aggregation.match(new Criteria()));
-        }
+        // We add the criteria to the aggregation via a MATCH clause
+        ops.add(Aggregation.match(criteria));
 
         // Execute the aggregation
         Aggregation agg = Aggregation.newAggregation(ops);
@@ -154,17 +143,17 @@ public class StudentHelper {
             group = Aggregation.group("generation").count().as("total");
         }
         if (!StringUtil.isNullOrEmpty(generation) || !StringUtil.isNullOrEmpty(modalityId)) {
-            if (!StringUtil.isNullOrEmpty(generation)) {
-                criteria = criteria.and("generation").is(generation);
-            }
-            if (!StringUtil.isNullOrEmpty(modalityId)) {
-                criteria = criteria.and("modality").is(modalityId);
-            }
-
             // We´ll show the modality name and count by that
             ops = getAggregations("Degree", "degreeId", "_id", "degree");
             ops.addAll(getAggregations("Modality", "degree.modality", "_id", "modality"));
             group = Aggregation.group("modality.name").count().as("total");
+
+            if (!StringUtil.isNullOrEmpty(generation)) {
+                criteria = criteria.and("generation").is(generation);
+            }
+            if (!StringUtil.isNullOrEmpty(modalityId)) {
+                criteria = criteria.and("degree.modality").is(modalityId);
+            }
         }
 
         ops.add(Aggregation.match(criteria));

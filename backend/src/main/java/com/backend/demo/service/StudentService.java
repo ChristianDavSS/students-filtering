@@ -1,20 +1,13 @@
 package com.backend.demo.service;
 
-import ch.qos.logback.core.util.StringUtil;
 import com.backend.demo.component.helpers.StudentHelper;
 import com.backend.demo.component.mapper.StudentMapper;
 import com.backend.demo.component.request.StudentRegisterRequest;
 import com.backend.demo.component.response.StudentResponse;
 import com.backend.demo.repository.StudentRepository;
 import com.backend.demo.repository.entity.Student;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.ConvertOperators;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,14 +16,11 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
     private final StudentHelper studentHelper;
-    private final MongoTemplate mongoTemplate;
 
-    public StudentService(StudentRepository studentRepository, StudentMapper studentMapper, StudentHelper studentHelper,
-                          MongoTemplate mongoTemplate) {
+    public StudentService(StudentRepository studentRepository, StudentMapper studentMapper, StudentHelper studentHelper) {
         this.studentRepository = studentRepository;
         this.studentMapper = studentMapper;
         this.studentHelper = studentHelper;
-        this.mongoTemplate = mongoTemplate;
     }
 
     /**
