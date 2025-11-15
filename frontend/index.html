@@ -1,251 +1,140 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta de Titulación</title>
+    <title>Sistema</title>
     <link rel="stylesheet" href="index.css">
-    <!-- Librería para gráficar datos -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <!-- Librería para hacer consultas al backend -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- Librería para convertir la tabla en un archivo .xlsx -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-    <header>
-    <div class="container">
-        <div class="header-content">
-            <h1 class="header-title">Consulta de Titulación UCOL</h1>
-            <div class="header-actions">
-                <button class="register-btn" id="registerBtn">
-                    Registrar Nuevo Titulado
-                </button>
-                <button class="delete-btn" id="deleteBtn">
-                    Eliminar Titulado
-                </button>
-            </div>
+    <header id="header-content">
+        <h2>Sistema de filtrado de estudiantes</h2>
+        <p>Gestión y análisis de información académica</p>
+    </header>
+
+    <button class="section-btn">Filtrado Individual</button>
+    <button class="section-btn">Filtrado General</button>
+    <button class="section-btn">Gestión</button>
+
+    <section class="tab">
+        <!-- Section for the individual filters -->
+         <h3>Búsqueda Individual</h3>
+         <p>Busca un estudiante egresado por número de cuenta o nombre</p>
+
+         <!-- Buttons for the dynamic content -->
+         <button class="individual-btn">Por Número de Cuenta</button>
+         <button class="individual-btn">Por Nombre</button>
+
+         <!-- Sección para el número de cuenta -->
+         <section class="ind-tab active">
+            <label for="studentId">Número de Cuenta</label>
+            <input type="text" name="studentId" id="studentId-filter-input">
+         </section>
+         <section class="ind-tab">
+            <label for="student-name">Nombre del Estudiante</label>
+            <input type="text" name="student-name" id="student-name-input">
+         </section>
+    </section>
+
+    <section class="tab active">
+        <!-- Section to make the general filters -->
+        <div id="general-filters">
+            <h3>Filtro de busqueda</h3>
+            <p>Aplica filtros para analizar a los estudiantes egresados.</p>
+
+            <!-- Dynamic Selectbox -->
+            <label for="faculty">Facultad</label>
+            <select name="faculty" id="faculty-select"></select>
+
+            <label for="career">Carrera</label>
+            <select name="career" id="career-select"></select>
+
+            <label for="generation">Generación</label>
+            <select name="generation" id="generation-select"></select>
+
+            <label for="modality">Modalidad</label>
+            <select name="modality" id="modality-select"></select>
         </div>
-    </div>
-</header>
 
-    <main class="container">
+        <!-- Section for the canvas (graphs) -->
+        <div id="chart-section">
+            <canvas id="chart-canvas">
+            </canvas>
+        </div>
 
-        <section class="search-section">
-            <h2 class="search-title">Búsqueda Individual de Titulados</h2>
-            <div class="search-container">
-                <input 
-                    type="text" 
-                    class="search-input" 
-                    id="searchInput"
-                    placeholder="Ingresa tu búsqueda..."
-                >
-                <select class="filter-select" id="filterSelect">
-                    <option value="ncta">Número de Cuenta</option>
-                    <option value="nombre">Nombre del Estudiante</option>
-                </select>
-                <button class="search-btn" id="searchBtn">
-                    Buscar
-                </button>
-            </div>
+        <!-- Section for the results table -->
+        <div id="general-table-section">
+            <h3>Resultados del filtrado</h3>
+            <p>Lista de estudiantes que coinciden con los criterios seleccionados.</p>
+            <table id="general-table">
+                <thead>
+                    <tr>
+                        <th>Número de cuenta</th>
+                        <th>Nombre(s)</th>
+                        <th>Facultad</th>
+                        <th>Carrera</th>
+                        <th>Generación</th>
+                        <th>Modalidad</th>
+                        <th>Fecha de titulación</th>
+                        <th>Sinodal Presidente</th>
+                        <th>Sinodal Secretario</th>
+                        <th>Sinodal Vocal</th>
+                        <th>Proyecto</th>
+                        <th>Asesor</th>
+                        <th>CoAsesor</th>
+                    </tr>
+                </thead>
+                <tbody id="general-table-body"></tbody>
+            </table>
+        </div>
+
+    </section>
+
+    <section class="tab">
+        <!-- Management section -->
+        <button class="management-btn">Estudiantes</button>
+        <button class="management-btn">Profesores</button>
+
+        <section class = "management-tab active">
+            <!-- Register student form -->
+             <form action="">
+                <h3>Añadir un nuevo estudiante</h3>
+                <p>Registra un nuevo egresado en el sistema</p>
+                <label for="studentId">Número de cuenta</label>
+                <input type="text" name="studentId" id="studentId" minlength="8" maxlength="8">
+                <button>Añadir</button>
+             </form>
+
+             <!-- Remove student form -->
+            <form action="">
+                <h3>Eliminar un egresado</h3>
+                <p>Eliminar un egresado mediante su número de cuenta</p>
+                <label for="studentId">Número de cuenta</label>
+                <input type="text" name="studentId" id="studentId" minlength="8" maxlength="8">
+                <button>Eliminar</button>
+             </form>
         </section>
 
-        <section class="search-section">
-            <h2 class="search-title">Búsqueda Gráfica de Titulados</h2>
-            <div class="search-container">
-                <select class="filter-select" id="facultySelectChart">
-                </select>
-                <select class="filter-select" id="careerSelectChart">
-                </select>
-                <select class="filter-select" id="generationSelectChart">
-                </select>
-                <select class="filter-select" id="modalitySelectChart">
-                </select>
-                <button class="search-btn" id="searchBtnChart">
-                    Generar Gráfico
-                </button>
-                <button class="clear-btn" id="clearBtnChart">
-                    Limpiar
-                </button>
-            </div>
+        <section class = "management-tab">
+            <!-- Register student form -->
+             <form action="">
+                <h3>Añadir un nuevo profesor</h3>
+                <p>Registra un nuevo profesor en el sistema</p>
+                <label for="studentId">Número de trabajador</label>
+                <input type="text" name="studentId" id="studentId" minlength="4" maxlength="4">
+                <button>Añadir</button>
+             </form>
+
+             <!-- Remove student form -->
+            <form action="">
+                <h3>Eliminar un profesor</h3>
+                <p>Eliminar un profesor mediante su número de trabajador</p>
+                <label for="studentId">Número de trabajador</label>
+                <input type="text" name="studentId" id="studentId" minlength="4" maxlength="4">
+                <button>Eliminar</button>
+             </form>
         </section>
-
-        <div class="results-section">
-            <h3 class="results-title">Resultados de la búsqueda</h3>
-            <div class="results-actions">
-                <button class="export-btn" id="exportBtn">
-                    <i class="fas fa-file-excel"></i> Exportar a Excel
-                </button>
-            </div>
-        </div>
-            
-            <div id="deleteModal" class="modal">
-                <div class="modal-content">
-                    <span class="close-btn">&times;</span>
-                    <h2>Eliminar Titulado</h2>
-                    <form id="deleteForm">
-                        <p>Confirma el número de cuenta del titulado que deseas eliminar.</p>
-                        <div class="form-group">
-                            <label for="deleteNcta">Número de Cuenta</label>
-                            <input type="text" id="deleteNcta" minlength="8" maxlength="8" required>
-                        </div>
-                        <button type="submit" class="submit-btn delete">Eliminar</button>
-                    </form>
-                </div>
-            </div>
-
-
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <p>Buscando datos...</p>
-            </div>
-
-            <div class="table-container">
-                <table id="resultsTable">
-                    <thead>
-                        <tr>
-                            <th>NUM. CUENTA</th>
-                            <th>NOMBRE ESTUDIANTE</th>
-                            <th>FACULTAD</th>
-                            <th>CARRERA</th>
-                            <th>GENERACIÓN</th>
-                            <th>MODALIDAD TITULACIÓN</th>
-                            <th>FECHA TITULACIÓN</th>
-                            <th>SINODAL 1 (PRESIDENTE)</th>
-                            <th>SINODAL 2 (SECRETARIO)</th>
-                            <th>SINODAL 3 (VOCAL)</th>
-                            <th>NOMBRE PROYECTO</th>
-                            <th>ASESOR</th>
-                            <th>CO-ASESOR</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        </tbody>
-                </table>
-            </div>
-
-            <div class="no-results" id="noResults" style="display: none;">
-                <p>No se encontraron resultados para tu búsqueda.</p>
-                <p>Intenta con otros términos o verifica que los datos sean correctos.</p>
-            </div>
-        </section>
-
-        <section class="charts-section" id="chartsSection">
-            <h3 class="charts-title">Estadísticas de Titulación</h3>
-            
-            <div class="loading" id="loadingChart">
-                <div class="spinner"></div>
-                <p>Generando gráfico...</p>
-            </div>
-
-            <div class="chart-stats" id="chartStats" style="display: none;">
-                <div class="stat-card">
-                    <div class="stat-number" id="totalTitulados">0</div>
-                    <div class="stat-label">Total</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="categoriasMostradas">0</div>
-                    <div class="stat-label">Categorías</div>
-                </div>
-            </div>
-
-            <div class="chart-type-selector" id="chartTypeSelector" style="display: none;">
-                <button class="chart-type-btn active" data-type="bar">Barras</button>
-                <button class="chart-type-btn" data-type="doughnut">Dona</button>
-                <button class="chart-type-btn" data-type="line">Línea</button>
-            </div>
-
-            <div class="chart-wrapper" id="chartWrapper" style="display: none;">
-                <h4 class="chart-title" id="chartTitle">Distribución</h4>
-                <div class="chart-container">
-                    <canvas id="chartCanvas"></canvas>
-                </div>
-            </div>
-
-            <div class="no-chart-data" id="noChartData">
-                <div style="font-size: 3em; opacity: 0.5; margin-bottom: 15px;">📊</div>
-                <p><strong>¡Genera tu primer gráfico!</strong></p>
-                <p>Selecciona una categoría y una opción para ver las estadísticas</p>
-            </div>
-        </section>
-    </main>
-
-    <div id="registerModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Registro de Nuevo Titulado</h2>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label for="regNcta">Número de Cuenta</label>
-                    <input type="text" id="regNcta" minlength="8" maxlength="8" required>
-                </div>
-                <div class="form-group">
-                    <label for="regNombre">Nombre del Estudiante</label>
-                    <input type="text" id="regNombre" required>
-                </div>
-                <div class="form-group">
-                    <label for="regFaculty">Facultad</label>
-                    <select id="regFaculty" required>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="regCareer">Carrera</label>
-                    <select id="regCareer" required disabled>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="regGeneration">Generación</label>
-                    <input type="text" id="regGeneration" placeholder="Ej. 2020-2025" minlength="9" maxlength="9" required>
-                </div>
-                <div class="form-group">
-                    <label for="regModality">Modalidad de Titulación</label>
-                    <select id="regModality" required>
-                        <option value="">Selecciona una modalidad</option>
-                        <optgroup label="Con asesor y co-asesor" id="conAsesores"></optgroup>
-                        <optgroup label="Sin asesor y co-asesor" id="sinAsesores"></optgroup>
-                    </select>
-                </div>
-                <div id="projectFields" class="form-group">
-                    <div class="form-group" id="proyectoField">
-                        <label for="regProyecto">Nombre del Proyecto</label>
-                        <input type="text" id="regProyecto">
-                    </div>
-                    <div class="form-group" id="asesorField">
-                        <label for="regAsesor">Asesor</label>
-                        <select name="regAsesor" id="regAsesor"></select>
-                    </div>
-                    <div class="form-group" id="coasesorField">
-                        <label for="regCoasesor">Co-asesor</label>
-                        <select name="regCoasesor" id="regCoasesor"></select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="regFechaTitulacion">Fecha de Titulación</label>
-                    <input type="date" id="regFechaTitulacion" required>
-                </div>
-                <div class="form-group">
-                    <label for="regSinodal1">Sinodal 1 (Presidente)</label>
-                    <select name="regSinodal1" id="regSinodalPresidente"></select>
-                </div>
-                <div class="form-group">
-                    <label for="regSinodal2">Sinodal 2 (Secretario)</label>
-                    <select name="regSinodal2" id="regSinodalSecretario"></select>
-                </div>
-                <div class="form-group">
-                    <label for="regSinodal3">Sinodal 3 (Vocal)</label>
-                    <select name="regSinodal3" id="regSinodalVocal"></select>
-                </div>
-                <button type="submit" class="submit-btn">Registrar</button>
-            </form>
-        </div>
-    </div>
-
-    <footer>
-        <div class="container">
-            <p>Equipo Barragan Marquez Vega Sanchez Rivera | Sistema de Consulta de Titulación</p>
-        </div>
-    </footer>
-
-    <script src="index.js"></script>
+    </section>
 </body>
+<script src="index.js"></script>
 </html>
