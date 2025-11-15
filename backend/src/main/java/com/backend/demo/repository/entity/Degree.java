@@ -17,7 +17,7 @@ import java.util.Map;
 public class Degree {
     @Id
     private String id;
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate date;
 
     // References

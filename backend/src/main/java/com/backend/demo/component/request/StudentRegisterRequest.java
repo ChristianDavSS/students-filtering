@@ -20,7 +20,7 @@ public class StudentRegisterRequest {
     private String generation;
     private String facultyId;
     private String careerId;
-    @JsonFormat(pattern = "yyyy/MM/dd")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate date;
     private String modalityId;
     private String project;
