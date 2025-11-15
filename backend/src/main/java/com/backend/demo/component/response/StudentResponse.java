@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Map;
 
 @Builder
@@ -20,7 +20,7 @@ public class StudentResponse {
     private String faculty;
     private String career;
     private String modality;
-    private Date date;
+    private LocalDate date;
     private String project;
     private Map<Role, String> teachers;
 }

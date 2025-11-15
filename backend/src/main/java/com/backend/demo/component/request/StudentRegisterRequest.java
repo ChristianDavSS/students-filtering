@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Map;
 
 @Builder
@@ -21,7 +21,7 @@ public class StudentRegisterRequest {
     private String facultyId;
     private String careerId;
     @JsonFormat(pattern = "yyyy/MM/dd")
-    private Date date;
+    private LocalDate date;
     private String modalityId;
     private String project;
     private Map<Role, String> teachers;

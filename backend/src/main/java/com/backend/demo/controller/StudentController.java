@@ -24,12 +24,17 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<StudentResponse> getAllStudents() {
-        return this.studentService.getAllStudents();
+    public List<StudentResponse> getAllStudentsBy(
+            @RequestParam(required = false, name = "facultyId") String facultyId,
+            @RequestParam(required = false, name = "careerId") String careerId,
+            @RequestParam(required = false, name = "generation") String generation,
+            @RequestParam(required = false, name = "modalityId") String modalityId
+    ) {
+        return this.studentService.getFilteredData(facultyId, careerId, generation, modalityId);
     }
 
     @GetMapping("/chart")
-    public Map<String, Long> getChartData(@RequestParam(required = false, name = "facultyId") String facultyId,
+    public Map<String, Integer> getChartData(@RequestParam(required = false, name = "facultyId") String facultyId,
                                           @RequestParam(required = false, name = "careerId") String careerId,
                                           @RequestParam(required = false, name = "generation") String generation,
                                           @RequestParam(required = false, name = "modalityId") String modalityId) {
