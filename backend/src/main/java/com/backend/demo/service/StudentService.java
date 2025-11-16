@@ -41,8 +41,9 @@ public class StudentService {
     /**
      * Method to get the student data filtered for the table
      * */
-    public List<StudentResponse> getFilteredData(String facultyId, String careerId, String generation, String modalityId) {
-        return studentHelper.getFilteredData(facultyId, careerId, generation, modalityId);
+    public List<StudentResponse> getFilteredData(String studentId, String name, String facultyId, String careerId,
+                                                 String generation, String modalityId) {
+        return studentHelper.getFilteredData(studentId, name, facultyId, careerId, generation, modalityId);
     }
 
     /**

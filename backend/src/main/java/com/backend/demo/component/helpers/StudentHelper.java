@@ -19,6 +19,7 @@ import org.springframework.data.mongodb.core.aggregation.ConvertOperators;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
@@ -74,7 +76,8 @@ public class StudentHelper {
     /**
      * Method to get the student data filtered for the table
      * */
-    public List<StudentResponse> getFilteredData(String facultyId, String careerId, String generation, String modalityId) {
+    public List<StudentResponse> getFilteredData(String studentId,String name, String facultyId, String careerId,
+                                                 String generation, String modalityId) {
         /*
          * Using CriteriaAPI for complex queries.
          */
@@ -82,6 +85,19 @@ public class StudentHelper {
         Criteria criteria = new Criteria();
         // List for the aggregations
         List<AggregationOperation> ops = new ArrayList<>();
+
+        // If we search by id or name we early return data.
+        if (!StringUtil.isNullOrEmpty(studentId) || !StringUtil.isNullOrEmpty(name)) {
+            Query query = new Query();
+            if (!StringUtil.isNullOrEmpty(studentId)) {
+                criteria = criteria.and("studentId").is(studentId);
+            } else if (!StringUtil.isNullOrEmpty(name)) {
+                criteria = criteria.and("name").regex(Pattern.compile(name, Pattern.CASE_INSENSITIVE));
+            }
+            query = query.addCriteria(criteria);
+
+            return mongoTemplate.find(query, Student.class).stream().map(studentMapper::toDto).toList();
+        }
 
         // Cast the degreeId from string to ObjectId so the lookup will work on it.
         // Lookup only works with field that are ObjectId

@@ -33,19 +33,45 @@
         <p>Busca un estudiante egresado por número de cuenta o nombre</p>
 
         <!-- Buttons for the dynamic content -->
-        <button class="individual-btn">Por Número de Cuenta</button>
-        <button class="individual-btn">Por Nombre</button>
+        <button class="individual-btn" id="studentId-search">Por Número de Cuenta</button>
+        <button class="individual-btn" id="name-search">Por Nombre</button>
 
-         <!-- Sección para el número de cuenta -->
-         <section class="ind-tab active">
+        <!-- Sección para el número de cuenta -->
+        <section class="ind-tab active">
             <label for="studentId">Número de Cuenta</label>
             <input type="text" name="studentId" id="studentId-filter-input" placeholder="Ej: 20207485">
-         </section>
+            <button class="student-search-btn">Buscar</button>
+        </section>
 
-         <section class="ind-tab">
+        <section class="ind-tab">
             <label for="student-name">Nombre del Estudiante</label>
             <input type="text" name="student-name" id="student-name-input" placeholder="Ej: Christian Sánchez">
-         </section>
+            <button class="student-search-btn">Buscar</button>
+        </section>
+
+        <div class="individual-results">
+            <h3>Resultados de los filtros:</h3>
+            <table id="general-table">
+                <thead>
+                    <tr>
+                        <th>Número de cuenta</th>
+                        <th>Nombre(s)</th>
+                        <th>Facultad</th>
+                        <th>Carrera</th>
+                        <th>Generación</th>
+                        <th>Modalidad</th>
+                        <th>Fecha de titulación</th>
+                        <th>Sinodal Presidente</th>
+                        <th>Sinodal Secretario</th>
+                        <th>Sinodal Vocal</th>
+                        <th>Proyecto</th>
+                        <th>Asesor</th>
+                        <th>CoAsesor</th>
+                    </tr>
+                </thead>
+                <tbody class="general-table-body"></tbody>
+            </table>
+        </div>
     </section>
 
     <section class="tab active">
@@ -110,7 +136,7 @@
                         <th>CoAsesor</th>
                     </tr>
                 </thead>
-                <tbody id="general-table-body"></tbody>
+                <tbody class="general-table-body"></tbody>
             </table>
         </div>
 

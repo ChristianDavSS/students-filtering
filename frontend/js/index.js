@@ -5,7 +5,7 @@ import { api } from './api.js';
 */
 
 // Variables globales
-const tableBody = document.getElementById("general-table-body");
+const tableBody = document.querySelectorAll(".general-table-body");
 // SELECTS
 const facultySelect = document.getElementById("faculty-select");
 const careerSelect = document.getElementById("career-select");
@@ -115,8 +115,6 @@ const fill_table = async () => {
     /*
         Method used to retrieve data from the database
     */
-   // Clear the body before the next query
-   tableBody.innerHTML = '';
    // Query params
     const obj = {
         facultyId: document.getElementById("faculty-select").value || null,
@@ -127,6 +125,13 @@ const fill_table = async () => {
 
     // Fetch the data from the API
     const { data } = await api.get("/student", {params: obj});
+
+    fill_table_data(data, 1);
+};
+
+export const fill_table_data = (data, idx) => {
+    // Clear the body before the next query
+    tableBody[idx].innerHTML = '';
 
     data.forEach(e => {
         const row = document.createElement("tr");
@@ -145,9 +150,9 @@ const fill_table = async () => {
             <td>${e.teachers?.ASESOR || "No aplica"}</td>
             <td>${e.teachers?.COASESOR || "No aplica"}</td>
         `;
-        tableBody.appendChild(row);
+        tableBody[idx].appendChild(row);
     })
-};
+}
 
 // Listeners
 document.getElementById("general-filter-btn").addEventListener("click", () => {

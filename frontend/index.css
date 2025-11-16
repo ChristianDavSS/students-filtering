@@ -205,9 +205,9 @@ form {
 }
 
 /* SHOW OR HIDE DYNAMIC HTML CONTENT */
-.tab, .ind-tab, .management-tab {
+.tab, .ind-tab, .management-tab, .individual-results {
     display: none;
 }
-.tab.active, .ind-tab.active, .management-tab.active {
+.tab.active, .ind-tab.active, .management-tab.active, .individual-results.active {
     display: block;
 }
