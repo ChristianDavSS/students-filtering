@@ -19,9 +19,9 @@
     </header>
 
     <div class="section-container">
-        <button class="section-btn">Filtrado Individual</button>
-        <button class="section-btn">Filtrado General</button>
-        <button class="section-btn">Gestión</button>
+        <button class="section-btn" id="individual-filter-btn">Filtrado Individual</button>
+        <button class="section-btn" id="general-filter-btn">Filtrado General</button>
+        <button class="section-btn" id="management-filter-btn">Gestión</button>
     </div>
 
     <section class="tab" style="background-color: white; border-radius: 0.4vh; padding: 1vh;">
@@ -79,7 +79,7 @@
                     <select name="modality" id="modality-select"></select>
                 </div>
             </div>
-            <button>Limpiar filtros</button>
+            <button id="reset-filters">Limpiar filtros</button>
         </div>
 
         <!-- Section for the canvas (charts) -->
@@ -264,4 +264,10 @@
     </section>
 </body>
 <script src="js/tabs.js"></script>
+<script type="module" src="js/index.js"></script>
+<script type="module" src="js/individual.js"></script>
+<!-- Import axios for our requests to the backend -->
+<script src="./js/axios.min.js"></script>
+<!-- Library to create charts -->
+ <script src="./js/chart.min.js"></script>
 </html>
